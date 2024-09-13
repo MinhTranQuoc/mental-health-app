@@ -43,7 +43,7 @@ const ComicGrid = () => {
   useEffect(() => {
     const container = scrollContainerRef.current;
     if (container) {
-      const scrollAmount = 255; // Amount of scroll per frame
+      const scrollAmount = 254; // Amount of scroll per frame
       const intervalDelay = 4000; 
 
       const content = container.innerHTML;

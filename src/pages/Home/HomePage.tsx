@@ -1,4 +1,4 @@
-import ComicGrid from "../../components/HomePage/ComicGrid";
+import ComicGrid from "../../components/Home/ComicGrid";
 
 const HomePage = () => {
 	return (

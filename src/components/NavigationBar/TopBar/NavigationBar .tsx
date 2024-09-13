@@ -1,59 +1,35 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 
-const NavigationBar = () => {
+const NavigationBar: React.FC = () => {
+  // Hardcoded token for testing
+  const hardcodedToken = 'mock-auth-token';
+
+  const [user, setUser] = useState({
+    isLoggedIn: false,
+    name: '',
+    avatar: '',
+  });
+  
   const [isDropdownOpen, setDropdownOpen] = useState(false);
-  const [isRankingDropdownOpen, setRankingDropdownOpen] = useState(false);
-  const dropdownRef = useRef<HTMLDivElement | null>(null);
-  const rankingDropdownRef = useRef<HTMLDivElement | null>(null);
+  const dropdownRef = useRef<HTMLDivElement>(null);
 
-  // Các thể loại truyện
-  const categories = [
-    'Hành Động',
-    'Phiêu Lưu',
-    'Tình Cảm',
-    'Hài Hước',
-    'Kinh Dị',
-    'Thể Thao',
-    'Trinh Thám',
-    'Khoa Học Viễn Tưởng',
-    'Giả Tưởng',
-    'Học Đường',
-    'Siêu Nhiên',
-    'Huyền Bí',
-    'Pháp Thuật',
-    'Xuyên Không',
-    'Điền Văn',
-  ];
-
-  // Các tùy chọn xếp hạng
-  const rankings = [
-    'Top Ngày',
-    'Top Tuần',
-    'Top Tháng',
-    'Yêu Thích',
-    'Mới Cập Nhật',
-    'Truyện Mới',
-    'Truyện Full',
-    'Truyện Ngẫu Nhiên',
-  ];
-
-  // Toggle dropdown
-  const toggleDropdown = () => {
-    setDropdownOpen(!isDropdownOpen);
-  };
-
-  const toggleRankingDropdown = () => {
-    setRankingDropdownOpen(!isRankingDropdownOpen);
-  };
-
-  // Đóng dropdown khi click ra ngoài
   useEffect(() => {
+    // Simulate checking for the hardcoded token
+    const token = localStorage.getItem('authToken') || hardcodedToken;
+
+    if (token === hardcodedToken) {
+      // Simulate fetching user data based on the hardcoded token
+      setUser({
+        isLoggedIn: true,
+        name: 'Nguyen Van A',
+        avatar: 'https://via.placeholder.com/40',
+      });
+    }
+
+    // Close the dropdown if clicked outside
     const handleClickOutside = (event: MouseEvent) => {
       if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
         setDropdownOpen(false);
-      }
-      if (rankingDropdownRef.current && !rankingDropdownRef.current.contains(event.target as Node)) {
-        setRankingDropdownOpen(false);
       }
     };
 
@@ -63,12 +39,25 @@ const NavigationBar = () => {
     };
   }, []);
 
+  const toggleDropdown = () => {
+    setDropdownOpen(!isDropdownOpen);
+  };
+
+  const handleLogout = () => {
+    // Remove token and clear user data
+    localStorage.removeItem('authToken');
+    setUser({
+      isLoggedIn: false,
+      name: '',
+      avatar: '',
+    });
+    setDropdownOpen(false); // Close dropdown on logout
+  };
+
   return (
     <nav className="w-full">
-      {/* Top section with logo, search bar, and buttons */}
       <div className="bg-white w-full border-b border-gray-200">
         <div className="container mx-auto flex justify-between items-center py-4">
-          {/* Logo */}
           <a href="/" className="flex items-center space-x-2">
             <img
               src="https://via.placeholder.com/40"
@@ -78,7 +67,6 @@ const NavigationBar = () => {
             <span className="font-bold text-gray-800 text-xl">TRUYENQQ</span>
           </a>
 
-          {/* Search bar */}
           <div className="relative w-1/2">
             <input
               type="text"
@@ -103,124 +91,52 @@ const NavigationBar = () => {
             </button>
           </div>
 
-          {/* Sign up and Login buttons */}
-          <div className="flex space-x-4">
-            <button className="bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600 transition">
-              Đăng ký
-            </button>
-            <button className="bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600 transition">
-              Đăng nhập
-            </button>
-          </div>
-        </div>
-      </div>
+          {user.isLoggedIn ? (
+            <div className="relative" ref={dropdownRef}>
+              <div className="flex items-center space-x-4 cursor-pointer" onClick={toggleDropdown}>
+                <img
+                  src={user.avatar}
+                  alt="User Avatar"
+                  className="h-12 w-12 rounded-full border border-gray-300"
+                />
+                <div className="flex flex-col">
+                  <span className="text-gray-800 font-semibold">{user.name}</span>
+                </div>
+              </div>
 
-      {/* Bottom section with navigation links */}
-      <div className="bg-[#f58120]">
-        <div className="container mx-auto flex items-center space-x-4">
-          <a
-            href="/"
-            className="text-white hover:bg-[#ff9d6c] px-4 py-3 rounded transition"
-          >
-            Trang Chủ
-          </a>
-
-          {/* Dropdown for 'Thể Loại' */}
-          <div className="relative" ref={dropdownRef} style={{ zIndex: 100 }}>
-            <button
-              className="text-white hover:bg-[#ff9d6c] px-4 py-3 rounded transition"
-              onClick={toggleDropdown}
-            >
-              Thể Loại
-            </button>
-
-            {isDropdownOpen && (
-              <div className="absolute left-0 mt-2 w-[1000px] bg-white shadow-lg rounded-lg z-50">
-                <ul className="grid grid-cols-5 gap-4 p-4">
-                  {categories.map((category) => (
-                    <li key={category} className="whitespace-nowrap">
+              {isDropdownOpen && (
+                <div className="absolute right-0 mt-2 w-48 bg-white shadow-lg rounded-lg z-50">
+                  <ul className="py-1">
+                    <li>
                       <a
-                        href="#"
-                        className="block text-gray-700 hover:bg-gray-100 px-4 py-3"
+                        href="#profile"
+                        className="block text-gray-700 hover:bg-gray-100 px-4 py-2"
                       >
-                        {category}
+                        Hồ sơ
                       </a>
                     </li>
-                  ))}
-                </ul>
-              </div>
-            )}
-          </div>
-
-          {/* Dropdown for 'Xếp Hạng' */}
-          <div className="relative" ref={rankingDropdownRef} style={{ zIndex: 100 }}>
-            <button
-              className="text-white hover:bg-[#ff9d6c] px-4 py-3 rounded transition"
-              onClick={toggleRankingDropdown}
-            >
-              Xếp Hạng
-            </button>
-
-            {isRankingDropdownOpen && (
-              <div className="absolute left-0 mt-2 w-[500px] bg-white shadow-lg rounded-lg z-50">
-                <ul className="grid grid-cols-2 gap-4 p-4">
-                  {rankings.map((ranking) => (
-                    <li key={ranking} className="whitespace-nowrap">
-                      <a
-                        href="#"
-                        className="block text-gray-700 hover:bg-gray-100 px-4 py-3"
+                    <li>
+                      <button
+                        onClick={handleLogout}
+                        className="block text-gray-700 hover:bg-gray-100 w-full text-left px-4 py-2"
                       >
-                        {ranking}
-                      </a>
+                        Đăng xuất
+                      </button>
                     </li>
-                  ))}
-                </ul>
-              </div>
-            )}
-          </div>
-
-          <a
-            href="#"
-            className="text-white hover:bg-[#ff9d6c] px-4 py-3 rounded transition"
-          >
-            Con Gái
-          </a>
-          <a
-            href="#"
-            className="text-white hover:bg-[#ff9d6c] px-4 py-3 rounded transition"
-          >
-            Con Trai
-          </a>
-          <a
-            href="#"
-            className="text-white hover:bg-[#ff9d6c] px-4 py-3 rounded transition"
-          >
-            Tìm Truyện
-          </a>
-          <a
-            href="#"
-            className="text-white hover:bg-[#ff9d6c] px-4 py-3 rounded transition"
-          >
-            Lịch Sử
-          </a>
-          <a
-            href="#"
-            className="text-white hover:bg-[#ff9d6c] px-4 py-3 rounded transition"
-          >
-            Theo Dõi
-          </a>
-          <a
-            href="#"
-            className="text-white hover:bg-[#ff9d6c] px-4 py-3 rounded transition"
-          >
-            Thảo Luận
-          </a>
-          <a
-            href="#"
-            className="text-white hover:bg-[#ff9d6c] px-4 py-3 rounded transition"
-          >
-            Fanpage
-          </a>
+                  </ul>
+                </div>
+              )}
+            </div>
+          ) : (
+            <div className="flex space-x-4">
+              <button className="bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600 transition">
+                Đăng ký
+              </button>
+              <button className="bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600 transition">
+                Đăng nhập
+              </button>
+            </div>
+          )}
         </div>
       </div>
     </nav>
