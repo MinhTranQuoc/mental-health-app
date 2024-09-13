@@ -38,13 +38,13 @@ const updatedComics = [
 const ComicGrid = () => {
   const scrollContainerRef = useRef<HTMLDivElement | null>(null);
   const [currentPage, setCurrentPage] = useState(1);
-  const itemsPerPage = 5;
+  const itemsPerPage = 25;
 
   useEffect(() => {
     const container = scrollContainerRef.current;
     if (container) {
-      const scrollAmount = 254; // Amount of scroll per frame
-      const intervalDelay = 4000; 
+      const scrollAmount = 280; // Amount of scroll per frame
+      const intervalDelay = 5000; 
 
       const content = container.innerHTML;
       container.innerHTML = `${content}${content}`;
