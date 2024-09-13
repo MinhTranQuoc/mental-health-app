@@ -13,7 +13,6 @@ function App() {
 				</Route>
         <Route path="/login" element={<LoginForm />}>
 				</Route>
-
       </Routes>
     </Router>
   );
