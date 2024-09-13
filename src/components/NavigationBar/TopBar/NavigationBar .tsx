@@ -1,8 +1,8 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom'; // Import useNavigate
+import { useNavigate } from 'react-router-dom';
 
 const NavigationBar: React.FC = () => {
-  const navigate = useNavigate(); // Initialize useNavigate
+  const navigate = useNavigate();
   const [user, setUser] = useState({
     isLoggedIn: false,
     name: '',
@@ -13,7 +13,6 @@ const NavigationBar: React.FC = () => {
   const dropdownRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    // Get user data from localStorage
     const name = localStorage.getItem('name') || '';
     const avatar = localStorage.getItem('avatar') || '';
     const isLoggedIn = localStorage.getItem('isLoggedIn') === 'true';
@@ -27,7 +26,6 @@ const NavigationBar: React.FC = () => {
       });
     }
 
-    // Close the dropdown if clicked outside
     const handleClickOutside = (event: MouseEvent) => {
       if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
         setDropdownOpen(false);
@@ -45,7 +43,6 @@ const NavigationBar: React.FC = () => {
   };
 
   const handleLogout = () => {
-    // Remove token and clear user data
     localStorage.removeItem('token');
     localStorage.removeItem('name');
     localStorage.removeItem('avatar');
@@ -55,11 +52,11 @@ const NavigationBar: React.FC = () => {
       name: '',
       avatar: '',
     });
-    setDropdownOpen(false); // Close dropdown on logout
+    setDropdownOpen(false);
   };
 
   const handleLoginClick = () => {
-    navigate('/login'); // Navigate to /login
+    navigate('/login');
   };
 
   return (
@@ -108,7 +105,7 @@ const NavigationBar: React.FC = () => {
                   className="h-12 w-12 rounded-full border border-gray-300"
                 />
                 <div className="flex flex-col">
-                  <span className="text-gray-800 font-semibold">{user.name}</span>
+                  <span className="text-gray-800 font-semibold text-lg">{user.name}</span> {/* Increased font size */}
                 </div>
               </div>
 
@@ -141,7 +138,7 @@ const NavigationBar: React.FC = () => {
                 Đăng ký
               </button>
               <button
-                onClick={handleLoginClick} // Add onClick handler
+                onClick={handleLoginClick}
                 className="bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600 transition"
               >
                 Đăng nhập
