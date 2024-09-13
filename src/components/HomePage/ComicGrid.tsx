@@ -96,7 +96,7 @@ const ComicGrid = () => {
               <CardMedia
                 component="img"
                 height="200"
-                image={`https://wimg.rule34.xxx//samples/2985/sample_f8cbff40624b0110d5f13c5bc1398e3d.jpg?10998886`} // Replace with actual image source
+                image={`https://minhducpc.vn/uploads/images/hinh-cute01.png`} // Replace with actual image source
                 alt={comic.title}
               />
               {comic.isHot && (
@@ -155,7 +155,7 @@ const ComicGrid = () => {
             <CardMedia
               component="img"
               height="200"
-              image={`https://wimg.rule34.xxx//samples/2985/sample_f8cbff40624b0110d5f13c5bc1398e3d.jpg?10998886`} // Replace with actual image source
+              image={`https://minhducpc.vn/uploads/images/hinh-cute01.png`} // Replace with actual image source
               alt={comic.title}
             />
             {comic.isHot && (

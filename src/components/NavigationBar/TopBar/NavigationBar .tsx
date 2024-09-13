@@ -126,7 +126,7 @@ const NavigationBar = () => {
           </a>
 
           {/* Dropdown for 'Thể Loại' */}
-          <div className="relative" ref={dropdownRef}>
+          <div className="relative" ref={dropdownRef} style={{ zIndex: 100 }}>
             <button
               className="text-white hover:bg-[#ff9d6c] px-4 py-3 rounded transition"
               onClick={toggleDropdown}
@@ -135,7 +135,7 @@ const NavigationBar = () => {
             </button>
 
             {isDropdownOpen && (
-              <div className="absolute left-0 mt-2 w-[1000px] bg-white shadow-lg rounded-lg z-10">
+              <div className="absolute left-0 mt-2 w-[1000px] bg-white shadow-lg rounded-lg z-50">
                 <ul className="grid grid-cols-5 gap-4 p-4">
                   {categories.map((category) => (
                     <li key={category} className="whitespace-nowrap">
@@ -153,7 +153,7 @@ const NavigationBar = () => {
           </div>
 
           {/* Dropdown for 'Xếp Hạng' */}
-          <div className="relative" ref={rankingDropdownRef}>
+          <div className="relative" ref={rankingDropdownRef} style={{ zIndex: 100 }}>
             <button
               className="text-white hover:bg-[#ff9d6c] px-4 py-3 rounded transition"
               onClick={toggleRankingDropdown}
@@ -162,7 +162,7 @@ const NavigationBar = () => {
             </button>
 
             {isRankingDropdownOpen && (
-              <div className="absolute left-0 mt-2 w-[500px] bg-white shadow-lg rounded-lg z-10">
+              <div className="absolute left-0 mt-2 w-[500px] bg-white shadow-lg rounded-lg z-50">
                 <ul className="grid grid-cols-2 gap-4 p-4">
                   {rankings.map((ranking) => (
                     <li key={ranking} className="whitespace-nowrap">
