@@ -34,6 +34,7 @@ const ComicGrid = () => {
   const scrollContainerRef = useRef<HTMLDivElement | null>(null);
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 25;
+  const trimTitle = 18;
 
   useEffect(() => {
     const container = scrollContainerRef.current;
@@ -129,7 +130,7 @@ const ComicGrid = () => {
               <CardContent sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
                 <Box>
                   <Typography variant="body2" className="font-bold">
-                    {truncateTitle(comic.title, 10)} {/* Cắt ngắn tiêu đề tại đây */}
+                    {truncateTitle(comic.title, trimTitle)} {/* Cắt ngắn tiêu đề tại đây */}
                   </Typography>
                   <Typography variant="body2" color="text.secondary">
                     Chương {comic.chapter}
@@ -168,7 +169,7 @@ const ComicGrid = () => {
           <Card key={index} sx={{ position: 'relative' }}>
             <CardMedia
               component="img"
-              height="200"
+              height="180"
               image={`https://minhducpc.vn/uploads/images/hinh-cute01.png`} // Replace with actual image source
               alt={comic.title}
             />
@@ -203,7 +204,7 @@ const ComicGrid = () => {
             <CardContent sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
               <Box>
                 <Typography variant="body2" className="font-bold">
-                  {truncateTitle(comic.title, 10)} {/* Cắt ngắn tiêu đề tại đây */}
+                  {truncateTitle(comic.title, trimTitle)} {/* Cắt ngắn tiêu đề tại đây */}
                 </Typography>
                 <Typography variant="body2" color="text.secondary">
                   Chapter {comic.chapter}
