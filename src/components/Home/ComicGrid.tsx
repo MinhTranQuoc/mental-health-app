@@ -4,35 +4,30 @@ import Masonry from '@mui/lab/Masonry';
 import { AiOutlineFilter } from 'react-icons/ai';
 import Pagination from '@mui/material/Pagination';
 
+const avatarUrl = 'https://cdn-icons-png.flaticon.com/512/6858/6858504.png';
+
 const topComics = [
-    { title: 'One Piece', chapter: 1125, updated: '3 Ngày Trước', isHot: true },
-  { title: 'Ngự Linh Thế Giới', chapter: 847, updated: '4 Ngày Trước', isHot: true },
-  { title: 'Onepunch Man', chapter: 258, updated: '7 Ngày Trước', isHot: true },
-  { title: 'Attack on Titan', chapter: 140, updated: '1 Ngày Trước', isHot: true },
-  { title: 'Dragon Ball', chapter: 325, updated: '2 Ngày Trước', isHot: true },
-  { title: 'Naruto', chapter: 701, updated: '5 Ngày Trước', isHot: true },
-  { title: 'Bleach', chapter: 686, updated: '6 Ngày Trước', isHot: true },
-  // Your top comics data here
+  { title: 'One Piece', chapter: 1125, updated: '3 Ngày Trước', isHot: true, avatar: avatarUrl },
+  { title: 'Ngự Linh Thế Giới', chapter: 847, updated: '4 Ngày Trước', isHot: true, avatar: avatarUrl },
+  // Add more top comics here...
 ];
 
 const updatedComics = [
-    { title: 'Centuria', chapter: 22, updated: '5 Giờ Trước', isHot: true },
-  { title: 'Noa-Senpai Wa Tomodachi', chapter: 32, updated: '6 Giờ Trước', isHot: true },
-  { title: 'Centuria', chapter: 22, updated: '5 Giờ Trước', isHot: true },
-  { title: 'Noa-Senpai Wa Tomodachi', chapter: 32, updated: '6 Giờ Trước', isHot: true },
-  { title: 'Centuria', chapter: 22, updated: '5 Giờ Trước', isHot: true },
-  { title: 'Noa-Senpai Wa Tomodachi', chapter: 32, updated: '6 Giờ Trước', isHot: true },
-  { title: 'Centuria', chapter: 22, updated: '5 Giờ Trước', isHot: true },
-  { title: 'Noa-Senpai Wa Tomodachi', chapter: 32, updated: '6 Giờ Trước', isHot: true },
-  { title: 'Centuria', chapter: 22, updated: '5 Giờ Trước', isHot: true },
-  { title: 'Noa-Senpai Wa Tomodachi', chapter: 32, updated: '6 Giờ Trước', isHot: true },
-  { title: 'Centuria', chapter: 22, updated: '5 Giờ Trước', isHot: true },
-  { title: 'Noa-Senpai Wa Tomodachi', chapter: 32, updated: '6 Giờ Trước', isHot: true },
-  { title: 'Centuria', chapter: 22, updated: '5 Giờ Trước', isHot: true },
-  { title: 'Noa-Senpai Wa Tomodachi', chapter: 32, updated: '6 Giờ Trước', isHot: true },
-  { title: 'Centuria', chapter: 22, updated: '5 Giờ Trước', isHot: true },
-  { title: 'Noa-Senpai Wa Tomodachi', chapter: 32, updated: '6 Giờ Trước', isHot: true },
-  // Your updated comics data here
+  { title: 'Centuria', chapter: 22, updated: '5 Giờ Trước', isHot: true, avatar: avatarUrl },
+  { title: 'Noa-Senpai Wa Tomodachi', chapter: 32, updated: '6 Giờ Trước', isHot: true, avatar: avatarUrl },
+  { title: 'Centuria', chapter: 22, updated: '5 Giờ Trước', isHot: true, avatar: avatarUrl },
+  { title: 'Noa-Senpai Wa Tomodachi', chapter: 32, updated: '6 Giờ Trước', isHot: true, avatar: avatarUrl },
+  { title: 'Centuria', chapter: 22, updated: '5 Giờ Trước', isHot: true, avatar: avatarUrl },
+  { title: 'Noa-Senpai Wa Tomodachi', chapter: 32, updated: '6 Giờ Trước', isHot: true, avatar: avatarUrl },
+  { title: 'Centuria', chapter: 22, updated: '5 Giờ Trước', isHot: true, avatar: avatarUrl },
+  { title: 'Noa-Senpai Wa Tomodachi', chapter: 32, updated: '6 Giờ Trước', isHot: true, avatar: avatarUrl },
+  { title: 'Centuria', chapter: 22, updated: '5 Giờ Trước', isHot: true, avatar: avatarUrl },
+  { title: 'Noa-Senpai Wa Tomodachi', chapter: 32, updated: '6 Giờ Trước', isHot: true, avatar: avatarUrl },
+  { title: 'Centuria', chapter: 22, updated: '5 Giờ Trước', isHot: true, avatar: avatarUrl },
+  { title: 'Noa-Senpai Wa Tomodachi', chapter: 32, updated: '6 Giờ Trước', isHot: true, avatar: avatarUrl },
+  { title: 'Centuria', chapter: 22, updated: '5 Giờ Trước', isHot: true, avatar: avatarUrl },
+  { title: 'Noa-Senpai Wa Tomodachi', chapter: 32, updated: '6 Giờ Trước', isHot: true, avatar: avatarUrl },
+  // Add more updated comics here...
 ];
 
 const ComicGrid = () => {
@@ -43,8 +38,8 @@ const ComicGrid = () => {
   useEffect(() => {
     const container = scrollContainerRef.current;
     if (container) {
-      const scrollAmount = 280; // Amount of scroll per frame
-      const intervalDelay = 5000; 
+      const scrollAmount = 280;
+      const intervalDelay = 5000;
 
       const content = container.innerHTML;
       container.innerHTML = `${content}${content}`;
@@ -69,6 +64,10 @@ const ComicGrid = () => {
   };
 
   const paginatedComics = updatedComics.slice((currentPage - 1) * itemsPerPage, currentPage * itemsPerPage);
+
+  const truncateTitle = (title: string, maxLength: number): string => {
+    return title.length > maxLength ? title.slice(0, maxLength) + '...' : title;
+  };
 
   return (
     <div style={{ width: '70%', margin: '0 auto', padding: '16px' }}>
@@ -127,13 +126,28 @@ const ComicGrid = () => {
               }}>
                 {comic.updated}
               </Box>
-              <CardContent>
-                <Typography variant="body2" className="font-bold">
-                  {comic.title}
-                </Typography>
-                <Typography variant="body2" color="text.secondary">
-                  Chương {comic.chapter}
-                </Typography>
+              <CardContent sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+                <Box>
+                  <Typography variant="body2" className="font-bold">
+                    {truncateTitle(comic.title, 10)} {/* Cắt ngắn tiêu đề tại đây */}
+                  </Typography>
+                  <Typography variant="body2" color="text.secondary">
+                    Chương {comic.chapter}
+                  </Typography>
+                </Box>
+                {/* Avatar of the uploader */}
+                <Box>
+                  <img
+                    src={comic.avatar}
+                    alt="avatar"
+                    style={{
+                      width: '40px',
+                      height: '40px',
+                      borderRadius: '50%',
+                      objectFit: 'cover',
+                    }}
+                  />
+                </Box>
               </CardContent>
             </Card>
           </Box>
@@ -141,7 +155,7 @@ const ComicGrid = () => {
       </div>
 
       {/* Second Map: Truyện Mới Cập Nhật */}
-      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', paddingBottom: '16px', paddingTop:'16px' }}>
+      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', paddingBottom: '16px', paddingTop: '16px' }}>
         <Typography variant="h5" component="h2" className="text-blue-500 font-bold">
           🌐 Truyện Mới Cập Nhật
         </Typography>
@@ -186,13 +200,28 @@ const ComicGrid = () => {
             }}>
               {comic.updated}
             </Box>
-            <CardContent>
-              <Typography variant="body2" className="font-bold">
-                {comic.title}
-              </Typography>
-              <Typography variant="body2" color="text.secondary">
-                Chapter {comic.chapter}
-              </Typography>
+            <CardContent sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+              <Box>
+                <Typography variant="body2" className="font-bold">
+                  {truncateTitle(comic.title, 10)} {/* Cắt ngắn tiêu đề tại đây */}
+                </Typography>
+                <Typography variant="body2" color="text.secondary">
+                  Chapter {comic.chapter}
+                </Typography>
+              </Box>
+              {/* Avatar of the uploader */}
+              <Box>
+                <img
+                  src={comic.avatar}
+                  alt="avatar"
+                  style={{
+                    width: '40px',
+                    height: '40px',
+                    borderRadius: '50%',
+                    objectFit: 'cover',
+                  }}
+                />
+              </Box>
             </CardContent>
           </Card>
         ))}
