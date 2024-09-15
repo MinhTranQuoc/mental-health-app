@@ -29,9 +29,10 @@ const Dropdown = ({
     </button>
     {isOpen && (
       <div
-        className={`absolute left-0 right-0 mt-2 bg-white shadow-lg rounded-lg z-50 ${
+        className={`absolute left-0 right-0 mt-2 bg-white shadow-lg rounded-lg ${
           isMobile ? "md:w-full" : "md:w-[1000px]"
         }`}
+        style={{ zIndex: 150 }} // Ensure dropdown has a higher z-index
       >
         <ul
           className={`grid ${
@@ -273,19 +274,13 @@ const NavigationLinks = () => {
           className="absolute top-0 left-0 right-0 bg-[#f58120] md:hidden"
           style={{ zIndex: 200 }} // Ensure mobile menu has the highest z-index
         >
-          <a
-            href="/"
-            className="block text-white hover:bg-[#ff9d6c] px-4 py-2 rounded transition w-full text-center"
-          >
-            Trang Chủ
-          </a>
           <Dropdown
             buttonText="Thể Loại"
             items={categories}
             isOpen={isDropdownOpen}
             toggleDropdown={toggleDropdown}
             dropdownRef={dropdownRef}
-            isMobile={true} // Mobile-specific styling
+            isMobile={true}
           />
           <Dropdown
             buttonText="Xếp Hạng"
@@ -293,7 +288,7 @@ const NavigationLinks = () => {
             isOpen={isRankingDropdownOpen}
             toggleDropdown={toggleRankingDropdown}
             dropdownRef={rankingDropdownRef}
-            isMobile={true} // Mobile-specific styling
+            isMobile={true}
           />
           {/* Orange line */}
           {Object.entries(links).map(([text, href]) => (
@@ -307,7 +302,7 @@ const NavigationLinks = () => {
           ))}
           {user.isLoggedIn && (
             <>
-              <div className="border-t border-[#ff9d6c] my-2"></div>
+              <div className="border-t border-[#ff9d6c] my-2"></div>{" "}
               <a
                 href="/profile"
                 className="block text-white hover:bg-[#ff9d6c] px-4 py-2 rounded transition w-full text-center"
@@ -324,7 +319,7 @@ const NavigationLinks = () => {
           )}
           {!user.isLoggedIn && (
             <>
-              <div className="border-t border-[#ff9d6c] my-2"></div>
+              <div className="border-t border-[#ff9d6c] my-2"></div>{" "}
               <a
                 href="/login"
                 className="block text-white hover:bg-[#ff9d6c] px-4 py-2 rounded transition w-full text-center"
