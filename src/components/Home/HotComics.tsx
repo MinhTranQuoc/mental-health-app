@@ -99,6 +99,7 @@ const HotComics = () => {
                     overflow: 'hidden',
                     textOverflow: 'ellipsis',
                     fontWeight: 'bold',
+                    fontSize:"18px",
                   }}>
                     {comic.title}
                   </Typography>
