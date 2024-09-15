@@ -63,6 +63,7 @@ const HotComics = () => {
                 height="200"
                 image={`https://minhducpc.vn/uploads/images/hinh-cute01.png`} // Thay thế bằng nguồn hình ảnh thực tế
                 alt={comic.title}
+                sx={{ objectFit: 'cover', width: '100%', height: '25rem' }}
               />
               {comic.isHot && (
                 <Box sx={{

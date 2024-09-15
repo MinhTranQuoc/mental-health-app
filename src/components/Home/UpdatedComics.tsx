@@ -3,26 +3,37 @@ import { Box, Card, CardContent, CardMedia, Typography, Button } from '@mui/mate
 import Masonry from '@mui/lab/Masonry';
 import { AiOutlineFilter } from 'react-icons/ai';
 import Pagination from '@mui/material/Pagination';
+import { useGetAllNovelsQuery } from '../../service/api/novelApi'; // Import the query hook
 
 const avatarUrl = 'https://cdn-icons-png.flaticon.com/512/6858/6858504.png';
 
-const updatedComics = [
-  { title: 'Centuria', chapter: 22, updated: '5 Giờ Trước', isHot: true, avatar: avatarUrl },
-  { title: 'Noa-Senpai Wa Tomodachi', chapter: 32, updated: '6 Giờ Trước', isHot: true, avatar: avatarUrl },
-  { title: 'Centuria', chapter: 22, updated: '5 Giờ Trước', isHot: true, avatar: avatarUrl },
-  { title: 'Noa-Senpai Wa Tomodachi', chapter: 32, updated: '6 Giờ Trước', isHot: true, avatar: avatarUrl },
-  // Thêm nhiều truyện mới cập nhật ở đây...
-];
-
 const UpdatedComics = () => {
   const [currentPage, setCurrentPage] = useState(1);
-  const itemsPerPage = 25;
+  const itemsPerPage = 5;
 
+  // Fetch data from the API
+  const { data, error, isLoading } = useGetAllNovelsQuery({ page: currentPage - 1, size: itemsPerPage });
+
+  // Handle pagination change
   const handlePageChange = (event: React.ChangeEvent<unknown>, value: number) => {
     setCurrentPage(value);
   };
 
-  const paginatedComics = updatedComics.slice((currentPage - 1) * itemsPerPage, currentPage * itemsPerPage);
+  if (isLoading) return <Typography>Loading...</Typography>;
+  
+  // Error handling
+  let errorMessage = 'An unexpected error occurred.';
+  if (error) {
+    if ('status' in error && 'data' in error) {
+      errorMessage = (error as any).data?.message || errorMessage;
+    } else if ('message' in error) {
+      errorMessage = (error as { message: string }).message;
+    }
+  }
+
+  if (error) return <Typography>Error: {errorMessage}</Typography>;
+
+  const paginatedComics = data?.content || []; // Use data from API query
 
   return (
     <>
@@ -34,14 +45,15 @@ const UpdatedComics = () => {
           Filter
         </Button>
       </Box>
-      <Masonry columns={5} spacing={2}>
+      <Masonry columns={5} spacing={2} sx={{marginLeft: '2px'}}>
         {paginatedComics.map((comic, index) => (
-          <Card key={index} sx={{ position: 'relative' }}>
+          <Card key={index} sx={{ position: 'relative', overflow: 'hidden'}}>
             <CardMedia
               component="img"
               height="180"
-              image={`https://minhducpc.vn/uploads/images/hinh-cute01.png`} // Thay thế bằng nguồn hình ảnh thực tế
+              image={comic.img || 'https://minhducpc.vn/uploads/images/hinh-cute01.png'}
               alt={comic.title}
+              sx={{ objectFit: 'cover', width: '100%', height: '25rem' }} // Ensure images fit the container
             />
             {comic.isHot && (
               <Box sx={{
@@ -78,7 +90,7 @@ const UpdatedComics = () => {
                   overflow: 'hidden',
                   textOverflow: 'ellipsis',
                   fontWeight: 'bold',
-                  fontSize:"18px",
+                  fontSize: "18px",
                 }}>
                   {comic.title}
                 </Typography>
@@ -88,7 +100,7 @@ const UpdatedComics = () => {
               </Box>
               <Box sx={{ flexShrink: 0 }}>
                 <img
-                  src={comic.avatar}
+                  src={comic.avatar || avatarUrl}
                   alt="avatar"
                   style={{
                     width: '40px',
@@ -105,7 +117,7 @@ const UpdatedComics = () => {
 
       <Box display="flex" justifyContent="center" marginTop="16px">
         <Pagination
-          count={Math.ceil(updatedComics.length / itemsPerPage)}
+          count={data ? Math.ceil(data.totalElements / itemsPerPage) : 0}
           page={currentPage}
           onChange={handlePageChange}
         />
