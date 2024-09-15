@@ -1,5 +1,6 @@
-import React, { useState, useRef, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
+import UserMenu from "../../User/UserMenu"; // Import the new component
 
 const NavigationBar: React.FC = () => {
   const navigate = useNavigate();
@@ -8,9 +9,6 @@ const NavigationBar: React.FC = () => {
     name: "",
     avatar: "",
   });
-
-  const [isDropdownOpen, setDropdownOpen] = useState(false);
-  const dropdownRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     const name = localStorage.getItem("name") || "";
@@ -25,24 +23,10 @@ const NavigationBar: React.FC = () => {
         avatar,
       });
     }
-
-    const handleClickOutside = (event: MouseEvent) => {
-      if (
-        dropdownRef.current &&
-        !dropdownRef.current.contains(event.target as Node)
-      ) {
-        setDropdownOpen(false);
-      }
-    };
-
-    document.addEventListener("mousedown", handleClickOutside);
-    return () => {
-      document.removeEventListener("mousedown", handleClickOutside);
-    };
   }, []);
 
-  const toggleDropdown = () => {
-    setDropdownOpen(!isDropdownOpen);
+  const handleLoginClick = () => {
+    navigate("/login");
   };
 
   const handleLogout = () => {
@@ -55,16 +39,10 @@ const NavigationBar: React.FC = () => {
       name: "",
       avatar: "",
     });
-    setDropdownOpen(false);
-  };
-
-  const handleLoginClick = () => {
-    navigate("/login");
   };
 
   return (
     <nav className="hidden md:block w-full">
-      {" "}
       {/* Add 'hidden md:block' to hide on mobile */}
       <div className="bg-white w-full border-b border-gray-200">
         <div className="container mx-auto flex justify-between items-center py-4">
@@ -99,60 +77,7 @@ const NavigationBar: React.FC = () => {
             </button>
           </div>
 
-          {user.isLoggedIn ? (
-            <div className="relative" ref={dropdownRef}>
-              <div
-                className="flex items-center space-x-4 cursor-pointer"
-                onClick={toggleDropdown}
-              >
-                <img
-                  src={user.avatar}
-                  alt="User Avatar"
-                  className="h-12 w-12 rounded-full border border-gray-300"
-                />
-                <div className="flex flex-col">
-                  <span className="text-gray-800 font-semibold text-lg">
-                    {user.name}
-                  </span>
-                </div>
-              </div>
-
-              {isDropdownOpen && (
-                <div className="absolute right-0 mt-2 w-48 bg-white shadow-lg rounded-lg z-50">
-                  <ul className="py-1">
-                    <li>
-                      <a
-                        href="#profile"
-                        className="block text-gray-700 hover:bg-gray-100 px-4 py-2"
-                      >
-                        Hồ sơ
-                      </a>
-                    </li>
-                    <li>
-                      <button
-                        onClick={handleLogout}
-                        className="block text-gray-700 hover:bg-gray-100 w-full text-left px-4 py-2"
-                      >
-                        Đăng xuất
-                      </button>
-                    </li>
-                  </ul>
-                </div>
-              )}
-            </div>
-          ) : (
-            <div className="flex space-x-4">
-              <button className="bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600 transition">
-                Đăng ký
-              </button>
-              <button
-                onClick={handleLoginClick}
-                className="bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600 transition"
-              >
-                Đăng nhập
-              </button>
-            </div>
-          )}
+          <UserMenu user={user} onLoginClick={handleLoginClick} onLogout={handleLogout} />
         </div>
       </div>
     </nav>
