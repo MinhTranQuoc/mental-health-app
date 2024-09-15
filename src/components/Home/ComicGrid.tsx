@@ -6,48 +6,39 @@ import Pagination from '@mui/material/Pagination';
 
 const avatarUrl = 'https://cdn-icons-png.flaticon.com/512/6858/6858504.png';
 
+// Dữ liệu các truyện hot
 const topComics = [
-  { title: 'One Piece', chapter: 1125, updated: '3 Ngày Trước', isHot: true, avatar: avatarUrl },
+  { title: 'One Pieceeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee', chapter: 1125, updated: '3 Ngày Trước', isHot: true, avatar: avatarUrl },
   { title: 'Ngự Linh Thế Giới', chapter: 847, updated: '4 Ngày Trước', isHot: true, avatar: avatarUrl },
-  // Add more top comics here...
+  // Thêm nhiều truyện hot ở đây...
 ];
 
+// Dữ liệu các truyện mới cập nhật
 const updatedComics = [
   { title: 'Centuria', chapter: 22, updated: '5 Giờ Trước', isHot: true, avatar: avatarUrl },
   { title: 'Noa-Senpai Wa Tomodachi', chapter: 32, updated: '6 Giờ Trước', isHot: true, avatar: avatarUrl },
-  { title: 'Centuria', chapter: 22, updated: '5 Giờ Trước', isHot: true, avatar: avatarUrl },
-  { title: 'Noa-Senpai Wa Tomodachi', chapter: 32, updated: '6 Giờ Trước', isHot: true, avatar: avatarUrl },
-  { title: 'Centuria', chapter: 22, updated: '5 Giờ Trước', isHot: true, avatar: avatarUrl },
-  { title: 'Noa-Senpai Wa Tomodachi', chapter: 32, updated: '6 Giờ Trước', isHot: true, avatar: avatarUrl },
-  { title: 'Centuria', chapter: 22, updated: '5 Giờ Trước', isHot: true, avatar: avatarUrl },
-  { title: 'Noa-Senpai Wa Tomodachi', chapter: 32, updated: '6 Giờ Trước', isHot: true, avatar: avatarUrl },
-  { title: 'Centuria', chapter: 22, updated: '5 Giờ Trước', isHot: true, avatar: avatarUrl },
-  { title: 'Noa-Senpai Wa Tomodachi', chapter: 32, updated: '6 Giờ Trước', isHot: true, avatar: avatarUrl },
-  { title: 'Centuria', chapter: 22, updated: '5 Giờ Trước', isHot: true, avatar: avatarUrl },
-  { title: 'Noa-Senpai Wa Tomodachi', chapter: 32, updated: '6 Giờ Trước', isHot: true, avatar: avatarUrl },
-  { title: 'Centuria', chapter: 22, updated: '5 Giờ Trước', isHot: true, avatar: avatarUrl },
-  { title: 'Noa-Senpai Wa Tomodachi', chapter: 32, updated: '6 Giờ Trước', isHot: true, avatar: avatarUrl },
-  // Add more updated comics here...
+  // Thêm nhiều truyện mới cập nhật ở đây...
 ];
 
 const ComicGrid = () => {
-  const scrollContainerRef = useRef<HTMLDivElement | null>(null);
-  const [currentPage, setCurrentPage] = useState(1);
-  const itemsPerPage = 25;
-  const trimTitle = 12;
+  const scrollContainerRef = useRef<HTMLDivElement | null>(null); // Tham chiếu đến phần tử chứa danh sách truyện
+  const [currentPage, setCurrentPage] = useState(1); // Trang hiện tại
+  const itemsPerPage = 25; // Số lượng truyện hiển thị trên mỗi trang
 
   useEffect(() => {
     const container = scrollContainerRef.current;
     if (container) {
-      const scrollAmount = 280;
-      const intervalDelay = 5000;
+      const scrollAmount = 280; // Số pixel di chuyển mỗi lần
+      const intervalDelay = 5000; // Thời gian giữa các lần cuộn (5 giây)
 
+      // Sao chép nội dung để tạo hiệu ứng cuộn liên tục
       const content = container.innerHTML;
       container.innerHTML = `${content}${content}`;
 
-      const scrollWidth = container.scrollWidth / 2;
+      const scrollWidth = container.scrollWidth / 2; // Chiều rộng tổng cộng của nội dung
       let scrollLeft = 0;
 
+      // Hàm cuộn liên tục
       const scrollInterval = setInterval(() => {
         scrollLeft += scrollAmount;
         if (scrollLeft >= scrollWidth) {
@@ -56,24 +47,22 @@ const ComicGrid = () => {
         container.scrollLeft = scrollLeft;
       }, intervalDelay);
 
+      // Dọn dẹp khi component bị hủy
       return () => clearInterval(scrollInterval);
     }
   }, []);
 
   const handlePageChange = (event: React.ChangeEvent<unknown>, value: number) => {
-    setCurrentPage(value);
+    setCurrentPage(value); // Cập nhật trang hiện tại khi người dùng thay đổi
   };
 
+  // Phân trang các truyện mới cập nhật
   const paginatedComics = updatedComics.slice((currentPage - 1) * itemsPerPage, currentPage * itemsPerPage);
-
-  const truncateTitle = (title: string, maxLength: number): string => {
-    return title.length > maxLength ? title.slice(0, maxLength) + '...' : title;
-  };
 
   return (
     <div style={{ width: '70%', margin: '0 auto', padding: '16px' }}>
-      {/* First Map: Truyện Hay */}
-      <Typography variant="h5" component="h2" className="text-red-500 font-bold pb-4">
+      {/* Phần danh sách truyện hot */}
+      <Typography variant="h5" component="h2" sx={{ color: 'red', fontWeight: 'bold', paddingBottom: '16px' }}>
         ⭐ Truyện Hay
       </Typography>
       <div
@@ -96,7 +85,7 @@ const ComicGrid = () => {
               <CardMedia
                 component="img"
                 height="200"
-                image={`https://minhducpc.vn/uploads/images/hinh-cute01.png`} // Replace with actual image source
+                image={`https://minhducpc.vn/uploads/images/hinh-cute01.png`} // Thay thế bằng nguồn hình ảnh thực tế
                 alt={comic.title}
               />
               {comic.isHot && (
@@ -128,16 +117,21 @@ const ComicGrid = () => {
                 {comic.updated}
               </Box>
               <CardContent sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-                <Box>
-                  <Typography variant="body2" className="font-bold">
-                    {truncateTitle(comic.title, trimTitle)} {/* Cắt ngắn tiêu đề tại đây */}
+                <Box sx={{ flex: 1, display: 'flex', flexDirection: 'column', overflow: 'hidden' }}>
+                  <Typography variant="body2" sx={{
+                    whiteSpace: 'nowrap',
+                    overflow: 'hidden',
+                    textOverflow: 'ellipsis',
+                    fontWeight: 'bold',
+                  }}>
+                    {comic.title}
                   </Typography>
                   <Typography variant="body2" color="text.secondary">
                     Chương {comic.chapter}
                   </Typography>
                 </Box>
-                {/* Avatar of the uploader */}
-                <Box>
+                {/* Avatar của người đăng */}
+                <Box sx={{ flexShrink: 0 }}>
                   <img
                     src={comic.avatar}
                     alt="avatar"
@@ -155,9 +149,9 @@ const ComicGrid = () => {
         ))}
       </div>
 
-      {/* Second Map: Truyện Mới Cập Nhật */}
+      {/* Phần danh sách truyện mới cập nhật */}
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', paddingBottom: '16px', paddingTop: '16px' }}>
-        <Typography variant="h5" component="h2" className="text-blue-500 font-bold">
+        <Typography variant="h5" component="h2" sx={{ color: 'blue', fontWeight: 'bold' }}>
           🌐 Truyện Mới Cập Nhật
         </Typography>
         <Button variant="outlined" startIcon={<AiOutlineFilter />} sx={{ color: 'orange', borderColor: 'orange' }}>
@@ -170,7 +164,7 @@ const ComicGrid = () => {
             <CardMedia
               component="img"
               height="180"
-              image={`https://minhducpc.vn/uploads/images/hinh-cute01.png`} // Replace with actual image source
+              image={`https://minhducpc.vn/uploads/images/hinh-cute01.png`} // Thay thế bằng nguồn hình ảnh thực tế
               alt={comic.title}
             />
             {comic.isHot && (
@@ -202,16 +196,21 @@ const ComicGrid = () => {
               {comic.updated}
             </Box>
             <CardContent sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-              <Box>
-                <Typography variant="body2" className="font-bold">
-                  {truncateTitle(comic.title, trimTitle)} {/* Cắt ngắn tiêu đề tại đây */}
+              <Box sx={{ flex: 1, display: 'flex', flexDirection: 'column', overflow: 'hidden' }}>
+                <Typography variant="body2" sx={{
+                  whiteSpace: 'nowrap',
+                  overflow: 'hidden',
+                  textOverflow: 'ellipsis',
+                  fontWeight: 'bold',
+                }}>
+                  {comic.title}
                 </Typography>
                 <Typography variant="body2" color="text.secondary">
                   Chapter {comic.chapter}
                 </Typography>
               </Box>
-              {/* Avatar of the uploader */}
-              <Box>
+              {/* Avatar của người đăng */}
+              <Box sx={{ flexShrink: 0 }}>
                 <img
                   src={comic.avatar}
                   alt="avatar"
@@ -228,15 +227,12 @@ const ComicGrid = () => {
         ))}
       </Masonry>
 
-      {/* Pagination Controls */}
+      {/* Điều khiển phân trang */}
       <div style={{ display: 'flex', justifyContent: 'center', marginTop: '16px' }}>
         <Pagination
           count={Math.ceil(updatedComics.length / itemsPerPage)}
           page={currentPage}
           onChange={handlePageChange}
-          siblingCount={1}
-          boundaryCount={1}
-          shape="rounded"
           color="primary"
         />
       </div>
