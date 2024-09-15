@@ -113,11 +113,11 @@ const NavigationLinks = () => {
 
   return (
     <div className="bg-[#f58120]">
-      <div className="container mx-auto flex items-center justify-between px-4 py-3 md:py-0 md:px-0 ">
+      <div className="container mx-auto flex items-center justify-between px-4 py-3 md:py-0 md:px-0">
         {/* Hamburger Menu for Mobile */}
-        <div className=" container mx-auto flex justify-between items-center py-2 md:hidden">
+        <div className="flex items-center justify-between w-full">
           <button
-            className="text-white md:hidden focus:outline-none items-center"
+            className="text-white block md:hidden focus:outline-none flex items-center"
             onClick={toggleMobileMenu}
           >
             <svg
@@ -139,7 +139,9 @@ const NavigationLinks = () => {
               ></path>
             </svg>
           </button>
-          <div className="relative flex-1 mx-4 md:hidden">
+
+          {/* Search Bar */}
+          <div className="relative flex-1 ml-4 md:hidden">
             <input
               type="text"
               placeholder="Bạn muốn tìm truyện gì"
@@ -161,18 +163,6 @@ const NavigationLinks = () => {
                 />
               </svg>
             </button>
-          </div>
-          <div className="flex items-center md:hidden">
-            <img
-              src={user.avatar}
-              alt="User Avatar"
-              className="h-11 w-11 rounded-full border border-gray-300 me-2"
-            />
-            <div className="flex flex-col">
-              <span className="text-white font-semibold text-lg">
-                {user.name}
-              </span>
-            </div>
           </div>
         </div>
 
@@ -248,17 +238,19 @@ const NavigationLinks = () => {
             isOpen={isDropdownOpen}
             toggleDropdown={toggleDropdown}
             dropdownRef={dropdownRef}
-            isMobile={true}
+            isMobile={true} // Mobile-specific styling
           />
+
           <Dropdown
             buttonText="Xếp Hạng"
             items={rankings}
             isOpen={isRankingDropdownOpen}
             toggleDropdown={toggleRankingDropdown}
             dropdownRef={rankingDropdownRef}
-            isMobile={true}
+            isMobile={true} // Mobile-specific styling
           />
-          {/* Orange line */}
+
+          {/* Other Links */}
           {Object.entries(links).map(([text, href]) => (
             <a
               href={href}
@@ -269,24 +261,15 @@ const NavigationLinks = () => {
             </a>
           ))}
 
-          {user.isLoggedIn && (
-            <>
-              <div className="border-t border-[#ff9d6c] my-2"></div>
-              <a
-                href="/profile"
-                className="block text-white hover:bg-[#ff9d6c] px-4 py-2 rounded transition w-full text-center"
-              >
-                Hồ Sơ Của Tôi
-              </a>
-              <button
-                onClick={handleLogout}
-                className="block text-white hover:bg-[#ff9d6c] px-4 py-2 rounded transition w-full text-center"
-              >
-                Đăng Xuất
-              </button>
-            </>
-          )}
-          {!user.isLoggedIn && (
+          {/* Login, Register, or Logout buttons */}
+          {user.isLoggedIn ? (
+            <button
+              onClick={handleLogout}
+              className="block text-white hover:bg-[#ff9d6c] px-4 py-2 rounded transition w-full text-center"
+            >
+              Đăng Xuất
+            </button>
+          ) : (
             <>
               <a
                 href="/login"
