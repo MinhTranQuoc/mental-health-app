@@ -42,7 +42,7 @@ const HotComics = () => {
       </Typography>
       <div
         ref={scrollContainerRef}
-        className="flex overflow-x-hidden whitespace-nowrap scroll-smooth"
+        className="flex overflow-x-hidden md:whitespace-nowrap scroll-smooth"
       >
         {topComics?.map((comic) => (
           <Box
