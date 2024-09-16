@@ -9,7 +9,10 @@ export const novelApi = createApi({
     getAllNovels: builder.query<Page<NovelResponseDto>, { page: number, size: number }>({
       query: ({ page, size }) => `novels?page=${page}&size=${size}`,
     }),
+    getHotNovels: builder.query<NovelResponseDto[], void>({
+      query: () => `hot-novel`,
+    }),
   }),
 });
 
-export const { useGetAllNovelsQuery } = novelApi;
+export const { useGetAllNovelsQuery, useGetHotNovelsQuery } = novelApi;

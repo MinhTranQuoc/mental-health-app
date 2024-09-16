@@ -1,20 +1,15 @@
 import React, { useEffect, useRef } from 'react';
 import { Box, Card, CardContent, CardMedia, Typography } from '@mui/material';
-
-const avatarUrl = 'https://cdn-icons-png.flaticon.com/512/6858/6858504.png';
-
-const topComics = [
-  { title: 'One Pieceeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee', chapter: 1125, updated: '3 Ngày Trước', isHot: true, avatar: avatarUrl,img:"https://img.wattpad.com/cover/186401212-256-k923164.jpg" },
-  { title: 'Ngự Linh Thế Giới', chapter: 847, updated: '4 Ngày Trước', isHot: true, avatar: avatarUrl, img:"https://img.wattpad.com/cover/194458604-256-k678602.jpg" },
-  // Thêm nhiều truyện hot ở đây...
-];
+import { useGetHotNovelsQuery } from '../../service/api/novelApi'; // Đường dẫn đến novelApi của bạn
+import LoadingSpinner from '../Features/LoadingSpinner'; // Giả sử bạn có component loading
 
 const HotComics = () => {
   const scrollContainerRef = useRef<HTMLDivElement | null>(null);
+  const { data: topComics, isLoading, error } = useGetHotNovelsQuery();
 
   useEffect(() => {
     const container = scrollContainerRef.current;
-    if (container) {
+    if (container && topComics) {
       const scrollAmount = 280;
       const intervalDelay = 5000;
 
@@ -34,7 +29,10 @@ const HotComics = () => {
 
       return () => clearInterval(scrollInterval);
     }
-  }, []);
+  }, [topComics]);
+
+  if (isLoading) return <LoadingSpinner />;
+  if (error) return <div>Error loading hot novels</div>;
 
   return (
     <>
@@ -52,7 +50,7 @@ const HotComics = () => {
         }}
         className="scroll-container"
       >
-        {topComics.map((comic, index) => (
+        {topComics?.map((comic, index) => (
           <Box
             key={index}
             sx={{ flex: '0 0 auto', width: '20%', padding: '8px', position: 'relative' }}
@@ -61,7 +59,7 @@ const HotComics = () => {
               <CardMedia
                 component="img"
                 height="200"
-                image={`https://minhducpc.vn/uploads/images/hinh-cute01.png`} // Thay thế bằng nguồn hình ảnh thực tế
+                image={comic.img} // Thay thế bằng URL của ảnh thực tế
                 alt={comic.title}
                 sx={{ objectFit: 'cover', width: '100%', height: '25rem' }}
               />
