@@ -1,19 +1,14 @@
 import { configureStore } from "@reduxjs/toolkit";
 import { rootReducer } from "./rootReducer";
+import { novelApi } from "../service/api/novelApi";
 
 
 export const store = configureStore({
 	reducer: rootReducer,
 	middleware: (getDefaultMiddleware) =>
 		getDefaultMiddleware()
-			// .concat(loginApi.middleware)
-			// .concat(categoriesApi.middleware)
-			// .concat(bannersApi.middleware)
-			// .concat(cartProductsApi.middleware)
-			// .concat(productsApi.middleware)
-			// .concat(orderApi.middleware)
-			// .concat(addressApi.middleware)
-			// .concat(addressGeoApi.middleware),
+			.concat(novelApi.middleware),
+
 });
 
 export type RootState = ReturnType<typeof store.getState>;

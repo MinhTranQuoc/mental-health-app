@@ -1,7 +1,10 @@
 import React, { useEffect, useRef, useState } from "react";
 import Dropdown from "./Dropdown";
+import UserMenu from "../../User/UserMenu";
+import { useNavigate } from "react-router-dom";
 
 const NavigationLinks = () => {
+  const navigate = useNavigate();
   const [isDropdownOpen, setDropdownOpen] = useState(false);
   const [isRankingDropdownOpen, setRankingDropdownOpen] = useState(false);
   const [isMobileMenuOpen, setMobileMenuOpen] = useState(false);
@@ -51,7 +54,7 @@ const NavigationLinks = () => {
     "Lịch Sử": "/lich-su",
     "Theo Dõi": "/theo-doi",
     "Thảo Luận": "/thao-luan",
-    Fanpage: "/fanpage",
+    "Fanpage": "/fanpage",
   };
 
   const toggleDropdown = () => setDropdownOpen(!isDropdownOpen);
@@ -110,6 +113,9 @@ const NavigationLinks = () => {
       avatar: "",
     });
   };
+  const handleLoginClick = () => {
+    navigate("/login");
+  };
 
   return (
     <div className="bg-[#f58120]">
@@ -162,18 +168,7 @@ const NavigationLinks = () => {
               </svg>
             </button>
           </div>
-          <div className="flex items-center md:hidden">
-            <img
-              src={user.avatar}
-              alt="User Avatar"
-              className="h-11 w-11 rounded-full border border-gray-300 me-2"
-            />
-            <div className="flex flex-col">
-              <span className="text-white font-semibold text-lg">
-                {user.name}
-              </span>
-            </div>
-          </div>
+            <UserMenu user={user} onLoginClick={handleLoginClick} onLogout={handleLogout} />
         </div>
 
         {/* Navigation Links */}
@@ -258,7 +253,6 @@ const NavigationLinks = () => {
             dropdownRef={rankingDropdownRef}
             isMobile={true}
           />
-          {/* Orange line */}
           {Object.entries(links).map(([text, href]) => (
             <a
               href={href}
@@ -268,40 +262,6 @@ const NavigationLinks = () => {
               {text}
             </a>
           ))}
-
-          {user.isLoggedIn && (
-            <>
-              <div className="border-t border-[#ff9d6c] my-2"></div>
-              <a
-                href="/profile"
-                className="block text-white hover:bg-[#ff9d6c] px-4 py-2 rounded transition w-full text-center"
-              >
-                Hồ Sơ Của Tôi
-              </a>
-              <button
-                onClick={handleLogout}
-                className="block text-white hover:bg-[#ff9d6c] px-4 py-2 rounded transition w-full text-center"
-              >
-                Đăng Xuất
-              </button>
-            </>
-          )}
-          {!user.isLoggedIn && (
-            <>
-              <a
-                href="/login"
-                className="block text-white hover:bg-[#ff9d6c] px-4 py-2 rounded transition w-full text-center"
-              >
-                Đăng Nhập
-              </a>
-              <a
-                href="/register"
-                className="block text-white hover:bg-[#ff9d6c] px-4 py-2 rounded transition w-full text-center"
-              >
-                Đăng Ký
-              </a>
-            </>
-          )}
         </div>
       )}
     </div>
