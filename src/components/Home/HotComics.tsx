@@ -8,13 +8,15 @@ const HotComics = () => {
   const { data: topComics, isLoading, error } = useGetHotNovelsQuery();
 
   useEffect(() => {
+    console.log(topComics); // Kiểm tra dữ liệu trả về từ API
+
     const container = scrollContainerRef.current;
     if (container && topComics) {
-      const scrollAmount = 280;
+      const scrollAmount = 300;
       const intervalDelay = 5000;
 
       const content = container.innerHTML;
-      container.innerHTML = `${content}${content}`;
+      container.innerHTML = `${content}${content}`; // Nhân đôi nội dung để cuộn
 
       const scrollWidth = container.scrollWidth / 2;
       let scrollLeft = 0;
@@ -59,7 +61,7 @@ const HotComics = () => {
               <CardMedia
                 component="img"
                 height="200"
-                image={comic.img} // Thay thế bằng URL của ảnh thực tế
+                image={comic.img} // URL của ảnh
                 alt={comic.title}
                 sx={{ objectFit: 'cover', width: '100%', height: '25rem' }}
               />
@@ -98,7 +100,7 @@ const HotComics = () => {
                     overflow: 'hidden',
                     textOverflow: 'ellipsis',
                     fontWeight: 'bold',
-                    fontSize:"18px",
+                    fontSize: "18px",
                   }}>
                     {comic.title}
                   </Typography>
@@ -111,8 +113,8 @@ const HotComics = () => {
                     src={comic.avatar}
                     alt="avatar"
                     style={{
-                      width: '40px',
-                      height: '40px',
+                      width: '50px',
+                      height: '50px',
                       borderRadius: '50%',
                       objectFit: 'cover',
                     }}

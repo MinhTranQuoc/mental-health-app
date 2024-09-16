@@ -8,9 +8,11 @@ export const novelApi = createApi({
   endpoints: (builder) => ({
     getAllNovels: builder.query<Page<NovelResponseDto>, { page: number, size: number }>({
       query: ({ page, size }) => `novels?page=${page}&size=${size}`,
+      transformResponse: (response: { data: Page<NovelResponseDto> }) => response.data,
     }),
     getHotNovels: builder.query<NovelResponseDto[], void>({
       query: () => `hot-novel`,
+      transformResponse: (response: { data: NovelResponseDto[] }) => response.data,
     }),
   }),
 });

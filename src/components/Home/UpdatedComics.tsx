@@ -20,7 +20,7 @@ const UpdatedComics = () => {
   };
 
   if (isLoading) return <Typography>Loading...</Typography>;
-  
+
   // Error handling
   let errorMessage = 'An unexpected error occurred.';
   if (error) {
@@ -34,6 +34,7 @@ const UpdatedComics = () => {
   if (error) return <Typography>Error: {errorMessage}</Typography>;
 
   const paginatedComics = data?.content || []; // Use data from API query
+  const totalItems = data?.totalElements || 0; // Total number of items for pagination
 
   return (
     <>
@@ -103,8 +104,8 @@ const UpdatedComics = () => {
                   src={comic.avatar || avatarUrl}
                   alt="avatar"
                   style={{
-                    width: '40px',
-                    height: '40px',
+                    width: '50px',
+                    height: '50px',
                     borderRadius: '50%',
                     objectFit: 'cover',
                   }}
@@ -117,7 +118,7 @@ const UpdatedComics = () => {
 
       <Box display="flex" justifyContent="center" marginTop="16px">
         <Pagination
-          count={data ? Math.ceil(data.totalElements / itemsPerPage) : 0}
+          count={Math.ceil(totalItems / itemsPerPage)}
           page={currentPage}
           onChange={handlePageChange}
         />
