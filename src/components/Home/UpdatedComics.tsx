@@ -1,15 +1,14 @@
 import React, { useState } from 'react';
-import { Box, Card, CardContent, CardMedia, Typography, Button } from '@mui/material';
+import { Box, Typography, Button } from '@mui/material';
 import Masonry from '@mui/lab/Masonry';
 import { AiOutlineFilter } from 'react-icons/ai';
 import Pagination from '@mui/material/Pagination';
 import { useGetAllNovelsQuery } from '../../service/api/novelApi'; // Import the query hook
-
-const avatarUrl = 'https://cdn-icons-png.flaticon.com/512/6858/6858504.png';
+import ComicCard from './ComicCard'; // Import the new ComicCard component
 
 const UpdatedComics = () => {
   const [currentPage, setCurrentPage] = useState(1);
-  const itemsPerPage = 5;
+  const itemsPerPage = 25;
 
   // Fetch data from the API
   const { data, error, isLoading } = useGetAllNovelsQuery({ page: currentPage - 1, size: itemsPerPage });
@@ -46,73 +45,9 @@ const UpdatedComics = () => {
           Filter
         </Button>
       </Box>
-      <Masonry columns={5} spacing={2} sx={{marginLeft: '2px'}}>
-        {paginatedComics.map((comic, index) => (
-          <Card key={index} sx={{ position: 'relative', overflow: 'hidden'}}>
-            <CardMedia
-              component="img"
-              height="180"
-              image={comic.img || 'https://minhducpc.vn/uploads/images/hinh-cute01.png'}
-              alt={comic.title}
-              sx={{ objectFit: 'cover', width: '100%', height: '25rem' }} // Ensure images fit the container
-            />
-            {comic.isHot && (
-              <Box sx={{
-                position: 'absolute',
-                top: 8,
-                right: 8,
-                backgroundColor: 'red',
-                color: 'white',
-                padding: '4px 8px',
-                fontSize: '0.75rem',
-                borderRadius: '4px',
-                zIndex: 10,
-              }}>
-                Hot
-              </Box>
-            )}
-            <Box sx={{
-              position: 'absolute',
-              top: 8,
-              left: 8,
-              backgroundColor: 'blue',
-              color: 'white',
-              padding: '4px 8px',
-              fontSize: '0.75rem',
-              borderRadius: '4px',
-              zIndex: 10,
-            }}>
-              {comic.updated}
-            </Box>
-            <CardContent sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-              <Box sx={{ flex: 1, display: 'flex', flexDirection: 'column', overflow: 'hidden' }}>
-                <Typography variant="body2" sx={{
-                  whiteSpace: 'nowrap',
-                  overflow: 'hidden',
-                  textOverflow: 'ellipsis',
-                  fontWeight: 'bold',
-                  fontSize: "18px",
-                }}>
-                  {comic.title}
-                </Typography>
-                <Typography variant="body2" color="text.secondary">
-                  Chapter {comic.chapter}
-                </Typography>
-              </Box>
-              <Box sx={{ flexShrink: 0 }}>
-                <img
-                  src={comic.avatar || avatarUrl}
-                  alt="avatar"
-                  style={{
-                    width: '50px',
-                    height: '50px',
-                    borderRadius: '50%',
-                    objectFit: 'cover',
-                  }}
-                />
-              </Box>
-            </CardContent>
-          </Card>
+      <Masonry columns={5} spacing={2} sx={{ marginLeft: '2px' }}>
+        {paginatedComics.map((comic) => (
+          <ComicCard key={comic.id} comic={comic} />
         ))}
       </Masonry>
 
