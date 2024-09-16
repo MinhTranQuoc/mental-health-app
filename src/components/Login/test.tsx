@@ -1,9 +1,8 @@
-import React, { useState } from "react";
+import React from "react";
 import { Button } from "@mui/material";
 import { Facebook } from "@mui/icons-material";
 import GoogleLoginButton from "./GoogleLoginButton";
-import { useNavigate } from "react-router-dom";
-import EmailLoginForm from "./EmailLoginForm"; // Import the new component
+import { useNavigate } from "react-router-dom"; // Import useNavigate
 
 interface GoogleProfile {
   token: string;
@@ -12,10 +11,9 @@ interface GoogleProfile {
 }
 
 const LoginForm: React.FC = () => {
-  const [showEmailForm, setShowEmailForm] = useState(false); // State to toggle between forms
-  const navigate = useNavigate();
+  const navigate = useNavigate(); // Khởi tạo useNavigate
 
-   // Hàm lấy thông tin profile từ Google API
+  // Hàm lấy thông tin profile từ Google API
   const fetchGoogleProfile = async (token: string) => {
     try {
       const response = await fetch(
@@ -65,10 +63,6 @@ const LoginForm: React.FC = () => {
     // Xử lý lỗi đăng nhập Google ở đây
   };
 
-  if (showEmailForm) {
-    return <EmailLoginForm onBack={() => setShowEmailForm(false)} />; // Show the email form
-  }
-
   return (
     <div className="flex justify-center items-center h-screen bg-gray-50">
       <div className="bg-white py-16 px-4 sm:px-8 lg:px-12 rounded-lg shadow-md w-full max-w-sm sm:max-w-md">
@@ -77,13 +71,13 @@ const LoginForm: React.FC = () => {
         </h2>
 
         <div className="space-y-4 sm:space-y-6">
-          {/* Google Login */}
+          {/* Nút Đăng Nhập Google */}
           <GoogleLoginButton
             onSuccess={handleGoogleSuccess}
             onError={handleGoogleError}
           />
 
-          {/* Facebook Login */}
+          {/* Nút Đăng Nhập Facebook */}
           <Button
             variant="outlined"
             startIcon={<Facebook sx={{ color: "#1877F2" }} />}
@@ -104,13 +98,14 @@ const LoginForm: React.FC = () => {
             Đăng nhập bằng Facebook
           </Button>
 
+          {/* Phân cách */}
           <div className="flex items-center">
             <hr className="flex-grow border-gray-300" />
             <span className="px-2 text-gray-500 text-sm">hoặc</span>
             <hr className="flex-grow border-gray-300" />
           </div>
 
-          {/* Email Login Button */}
+          {/* Nút Đăng Nhập Email */}
           <Button
             variant="contained"
             fullWidth
@@ -123,18 +118,19 @@ const LoginForm: React.FC = () => {
               fontSize: "16px",
               textTransform: "none",
             }}
-            onClick={() => setShowEmailForm(true)} // Toggle to show email form
           >
             Đăng nhập với email
           </Button>
         </div>
 
+        {/* Quên Mật Khẩu */}
         <div className="text-center my-6">
           <a href="#" className="text-sm text-gray-600 hover:underline">
             Quên mật khẩu?
           </a>
         </div>
 
+        {/* Nút Đăng Ký */}
         <div className="text-center">
           <Button
             href="#"
