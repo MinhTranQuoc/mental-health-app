@@ -1,49 +1,29 @@
-import React, { useState, useEffect } from "react";
+import React from "react";
 import { useNavigate } from "react-router-dom";
-import UserMenu from "../../User/UserMenu"; // Import the new component
+import { useSelector, useDispatch } from "react-redux";
+import { RootState } from "../../../store/store";
+import { logout } from "../../User/authSlice";
+import UserMenu from "../../User/UserMenu";
 
 const NavigationBar: React.FC = () => {
   const navigate = useNavigate();
-  const [user, setUser] = useState({
-    isLoggedIn: false,
-    name: "",
-    avatar: "",
-  });
+  const dispatch = useDispatch();
 
-  useEffect(() => {
-    const name = localStorage.getItem("name") || "";
-    const avatar = localStorage.getItem("avatar") || "";
-    const isLoggedIn = localStorage.getItem("isLoggedIn") === "true";
-    const token = localStorage.getItem("token");
-
-    if (isLoggedIn && token) {
-      setUser({
-        isLoggedIn,
-        name,
-        avatar,
-      });
-    }
-  }, []);
+  const { isLoggedIn, readername, avatar } = useSelector(
+    (state: RootState) => state.auth
+  );
 
   const handleLoginClick = () => {
     navigate("/login");
   };
 
   const handleLogout = () => {
-    localStorage.removeItem("token");
-    localStorage.removeItem("name");
-    localStorage.removeItem("avatar");
-    localStorage.removeItem("isLoggedIn");
-    setUser({
-      isLoggedIn: false,
-      name: "",
-      avatar: "",
-    });
+    dispatch(logout());
+    navigate("/"); // Redirect to home after logout
   };
 
   return (
     <nav className="hidden md:block w-full">
-      {/* Add 'hidden md:block' to hide on mobile */}
       <div className="bg-white w-full border-b border-gray-200">
         <div className="container mx-auto flex justify-between items-center py-4">
           <a href="/" className="flex items-center space-x-2">
@@ -77,7 +57,11 @@ const NavigationBar: React.FC = () => {
             </button>
           </div>
 
-          <UserMenu user={user} onLoginClick={handleLoginClick} onLogout={handleLogout} />
+          <UserMenu
+            user={{ isLoggedIn, readername, avatar }}
+            onLoginClick={handleLoginClick}
+            onLogout={handleLogout}
+          />
         </div>
       </div>
     </nav>

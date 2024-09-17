@@ -8,7 +8,62 @@ interface GoogleProfile {
   token: string;
   name: string;
   picture: string;
+
+
+
+
 }
+
+
+  // Hàm lấy thông tin profile từ Google API
+  // const fetchGoogleProfile = async (token: string) => {
+  //   try {
+  //     const response = await fetch(
+  //       "https://www.googleapis.com/oauth2/v3/userinfo",
+  //       {
+  //         headers: {
+  //           Authorization: `Bearer ${token}`,
+  //         },
+  //       }
+  //     );
+  //     const data = await response.json();
+  //     return data;
+  //   } catch (error) {
+  //     console.error("Failed to fetch Google profile:", error);
+  //     return null;
+  //   }
+  // };
+
+  // Hàm xử lý khi đăng nhập Google thành công
+  // const handleGoogleSuccess = async (response: any) => {
+  //   console.log("Google login successful:", response);
+
+  //   const token = response.access_token;
+  //   console.log("Google access token:", token);
+
+  //   const profileData = await fetchGoogleProfile(token);
+
+  //   if (profileData) {
+  //     const profile: GoogleProfile = {
+  //       token: token,
+  //       name: profileData.name,
+  //       picture: profileData.picture,
+  //     };
+
+  //     // Lưu thông tin vào localStorage
+  //     localStorage.setItem("token", profile.token);
+  //     localStorage.setItem("name", profile.name);
+  //     localStorage.setItem("avatar", profile.picture);
+  //     localStorage.setItem("isLoggedIn", "true");
+  //     navigate("/");
+  //   }
+  // };
+
+  // Hàm xử lý khi đăng nhập Google gặp lỗi
+  // const handleGoogleError = () => {
+  //   console.error("Google login error");
+    // Xử lý lỗi đăng nhập Google ở đây
+  // };
 
 const LoginForm: React.FC = () => {
   const navigate = useNavigate(); // Khởi tạo useNavigate

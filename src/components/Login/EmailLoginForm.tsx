@@ -1,23 +1,38 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Button, IconButton, InputAdornment, TextField } from "@mui/material";
 import { Visibility, VisibilityOff } from "@mui/icons-material";
 import { useFormik } from "formik";
 import * as Yup from "yup";
-import { useLoginMutation } from "../../service/api/loginApi"; // Import API từ loginApi
+import { useLoginMutation } from "../../service/api/loginApi";
 import { useNavigate } from "react-router-dom";
+import { useDispatch } from 'react-redux';
+import { setCredentials } from '../../components/User/authSlice';
 
 const LoginForm: React.FC<{ onBack: () => void }> = ({ onBack }) => {
   const [showPassword, setShowPassword] = useState(false);
   const [loginError, setLoginError] = useState("");
+  const [isSubmitting, setIsSubmitting] = useState(false);
   const navigate = useNavigate();
-
-  // Gọi API đăng nhập
+  const dispatch = useDispatch();
   const [login] = useLoginMutation();
+
+  // Retrieve token from localStorage and update Redux Store on component mount
+  useEffect(() => {
+    const token = localStorage.getItem("token");
+    if (token) {
+      const readername = localStorage.getItem("readername");
+      const avatar = localStorage.getItem("avatar");
+      dispatch(setCredentials({
+        token,
+        readername,
+        avatar
+      }));
+    }
+  }, [dispatch]);
 
   // Validation schema
   const validationSchema = Yup.object({
-    username: Yup.string()
-      .required("Vui lòng nhập tên đăng nhập"),
+    username: Yup.string().required("Vui lòng nhập tên đăng nhập"),
     password: Yup.string().required("Vui lòng nhập mật khẩu"),
   });
 
@@ -29,16 +44,28 @@ const LoginForm: React.FC<{ onBack: () => void }> = ({ onBack }) => {
     },
     validationSchema,
     onSubmit: async (values) => {
+      if (isSubmitting) return; // Prevent multiple form submissions
+      setIsSubmitting(true); // Set form to submitting state
 
       try {
-        const { data } = await login(values).unwrap(); // Gửi yêu cầu đăng nhập
-        localStorage.setItem("token", data.token); // Lưu token vào localStorage
-        localStorage.setItem("readername",data.readername);
-        localStorage.setItem("avatar",data.avatar)
-        navigate("/"); // Điều hướng tới trang dashboard sau khi đăng nhập thành công
+        const { data } = await login(values).unwrap();
+        localStorage.setItem("token", data.token);
+        localStorage.setItem("readername", data.readername);
+        localStorage.setItem("avatar", data.avatar);
+
+        // Dispatch setCredentials with userData
+        dispatch(setCredentials({
+          token: data.token,
+          readername: data.readername,
+          avatar: data.avatar
+        }));
+
+        navigate("/"); // Navigate to dashboard on success
       } catch (error) {
-        console.error("Login error:", error); // Log error to debug
+        console.error("Login error:", error);
         setLoginError("Đăng nhập thất bại. Vui lòng kiểm tra lại thông tin.");
+      } finally {
+        setIsSubmitting(false); // Reset submitting state
       }
     },
   });
@@ -110,9 +137,10 @@ const LoginForm: React.FC<{ onBack: () => void }> = ({ onBack }) => {
             variant="contained"
             fullWidth
             type="submit"
+            disabled={isSubmitting}
             style={{
               height: "48px",
-              backgroundColor: "#000",
+              backgroundColor: isSubmitting ? "#ccc" : "#000",
               color: "#fff",
               borderRadius: "9999px",
               fontSize: "16px",
@@ -120,7 +148,7 @@ const LoginForm: React.FC<{ onBack: () => void }> = ({ onBack }) => {
               textTransform: "none",
             }}
           >
-            Đăng nhập
+            {isSubmitting ? "Đang đăng nhập..." : "Đăng nhập"}
           </Button>
 
           {/* Hiển thị lỗi đăng nhập nếu có */}
