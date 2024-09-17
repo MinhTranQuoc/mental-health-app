@@ -4,7 +4,16 @@ import { Page } from "../../interfaces/Page";
 
 export const novelApi = createApi({
   reducerPath: "novelApi",
-  baseQuery: fetchBaseQuery({ baseUrl: "http://localhost:8080/novel" }),
+  baseQuery: fetchBaseQuery({
+    baseUrl: "http://localhost:8080/novel",
+    prepareHeaders: (headers) => {
+      const token = localStorage.getItem('token'); // Lấy token từ localStorage
+      if (token) {
+        headers.set('Authorization', `Bearer ${token}`); // Thêm token vào tiêu đề Authorization
+      }
+      return headers;
+    },
+  }),
   endpoints: (builder) => ({
     getAllNovels: builder.query<
       Page<NovelResponseDto>,
