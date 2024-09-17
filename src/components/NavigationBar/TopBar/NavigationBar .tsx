@@ -27,7 +27,11 @@ const NavigationBar: React.FC = () => {
       <div className="bg-white w-full border-b border-gray-200">
         <div className="container mx-auto flex justify-between items-center py-4">
           <a href="/" className="flex items-center space-x-2">
-            <img src="" alt="Logo" className="h-10" />
+            <img
+              src="https://upload-os-bbs.hoyolab.com/upload/2023/02/05/132415658/548c4b3d7abf671b4bf338de4f8c0bc1_6253957035541607485.jpg?x-oss-process=image%2Fresize%2Cs_1000%2Fauto-orient%2C0%2Finterlace%2C1%2Fformat%2Cwebp%2Fquality%2Cq_70"
+              alt="Logo"
+              className="h-12 w-12"
+            />
             <span className="font-bold text-gray-800 text-xl">
               MENTAL HEALTH
             </span>

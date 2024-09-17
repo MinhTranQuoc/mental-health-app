@@ -32,7 +32,7 @@ const ComicCard: React.FC<ComicCardProps> = ({ comic }) => {
             className="md:truncate md:font-bold text-base sm:text-lg md:text-xl"
             sx={{
               fontWeight: { md: "bold" }, // Font-weight bold khi màn hình >= md
-              fontSize: { xs: "0.75rem", sm: "1.125rem", md: "1.25rem" }, // Điều chỉnh kích thước theo breakpoint
+              fontSize: { xs: "0.75rem", sm: "0.9rem", md: "1rem" }, // Điều chỉnh kích thước theo breakpoint
             }}
           >
             {comic.title}
