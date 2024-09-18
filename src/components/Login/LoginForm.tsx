@@ -67,7 +67,7 @@ const LoginForm: React.FC = () => {
 
   // Nếu form đăng ký đang được hiển thị, trả về component RegisterForm
   if (showRegisterForm) {
-    return <RegisterForm onBack={() => setShowRegisterForm(false)} />;
+    return <RegisterForm onBackToLogin={() => setShowRegisterForm(false)} />;
   }
 
   return (

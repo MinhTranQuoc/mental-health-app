@@ -5,10 +5,10 @@ import { useFormik } from "formik";
 import * as Yup from "yup";
 
 interface RegisterProps {
-  onBack: () => void; // Add onBack prop
+    onEmailRegister: () => void; // Add onBack prop
 }
 
-const Register: React.FC<RegisterProps> = ({ onBack }) => {
+const Register: React.FC<RegisterProps> = ({ onEmailRegister }) => {
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
 
@@ -43,7 +43,7 @@ const Register: React.FC<RegisterProps> = ({ onBack }) => {
   return (
     <div className="flex justify-center items-center h-screen bg-gray-50">
       <div className="bg-white py-16 px-4 sm:px-8 lg:px-12 rounded-lg shadow-md w-full max-w-sm sm:max-w-md">
-        <button onClick={onBack} className="flex items-center mb-6 space-x-2 text-black">
+        <button onClick={onEmailRegister} className="flex items-center mb-6 space-x-2 text-black">
           <span className="text-xl font-bold">{"<"}</span>
           <span className="text-base font-medium">Quay trở lại</span>
         </button>
