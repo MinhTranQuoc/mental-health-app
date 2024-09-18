@@ -2,8 +2,8 @@ import React, { useState } from "react";
 import { Button } from "@mui/material";
 import { Facebook } from "@mui/icons-material";
 import GoogleLoginButton from "./GoogleLoginButton";
-import { useNavigate } from "react-router-dom";
-import EmailLoginForm from "./EmailLoginForm"; // Import the new component
+import EmailLoginForm from "./EmailLoginForm";
+import RegisterForm from "../Register/RegisterForm"; // Import RegisterForm
 
 interface GoogleProfile {
   token: string;
@@ -12,10 +12,10 @@ interface GoogleProfile {
 }
 
 const LoginForm: React.FC = () => {
-  const [showEmailForm, setShowEmailForm] = useState(false); // State to toggle between forms
-  const navigate = useNavigate();
+  const [showEmailForm, setShowEmailForm] = useState(false); // State to toggle email form
+  const [showRegisterForm, setShowRegisterForm] = useState(false); // State to toggle register form
 
-   // Hàm lấy thông tin profile từ Google API
+  // Hàm lấy thông tin profile từ Google API
   const fetchGoogleProfile = async (token: string) => {
     try {
       const response = await fetch(
@@ -37,10 +37,7 @@ const LoginForm: React.FC = () => {
   // Hàm xử lý khi đăng nhập Google thành công
   const handleGoogleSuccess = async (response: any) => {
     console.log("Google login successful:", response);
-
     const token = response.access_token;
-    console.log("Google access token:", token);
-
     const profileData = await fetchGoogleProfile(token);
 
     if (profileData) {
@@ -50,23 +47,27 @@ const LoginForm: React.FC = () => {
         picture: profileData.picture,
       };
 
-      // Lưu thông tin vào localStorage
       localStorage.setItem("token", profile.token);
       localStorage.setItem("name", profile.name);
       localStorage.setItem("avatar", profile.picture);
       localStorage.setItem("isLoggedIn", "true");
-      navigate("/");
+      // navigate to home page
     }
   };
 
   // Hàm xử lý khi đăng nhập Google gặp lỗi
   const handleGoogleError = () => {
     console.error("Google login error");
-    // Xử lý lỗi đăng nhập Google ở đây
   };
 
+  // Nếu form đăng nhập email đang được hiển thị, trả về component EmailLoginForm
   if (showEmailForm) {
-    return <EmailLoginForm onBack={() => setShowEmailForm(false)} />; // Show the email form
+    return <EmailLoginForm onBack={() => setShowEmailForm(false)} />;
+  }
+
+  // Nếu form đăng ký đang được hiển thị, trả về component RegisterForm
+  if (showRegisterForm) {
+    return <RegisterForm onBack={() => setShowRegisterForm(false)} />;
   }
 
   return (
@@ -136,8 +137,8 @@ const LoginForm: React.FC = () => {
         </div>
 
         <div className="text-center">
+          {/* Button to toggle RegisterForm */}
           <Button
-            href="#"
             variant="outlined"
             fullWidth
             className="normal-case"
@@ -151,6 +152,7 @@ const LoginForm: React.FC = () => {
               fontSize: "16px",
               textTransform: "none",
             }}
+            onClick={() => setShowRegisterForm(true)} // Toggle to show register form
           >
             Bạn không có tài khoản? Hãy đăng ký
           </Button>
