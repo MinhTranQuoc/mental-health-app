@@ -2,6 +2,7 @@ import { useEffect } from "react";
 import NavigationBar from "../components/NavigationBar/TopBar/NavigationBar ";
 import { Outlet } from "react-router-dom";
 import Footer from "../components/Footer/Footer";
+import NavigationLinks from "../components/NavigationBar/BottomBar/NavigationLinks";
 
 
 
@@ -12,6 +13,7 @@ const HomeLayout = () => {
 	return (
 		<>
 			<NavigationBar />
+			<NavigationLinks/>
 			    <Outlet />
 			<Footer />
 		</>
