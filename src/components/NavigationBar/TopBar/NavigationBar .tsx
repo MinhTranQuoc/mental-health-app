@@ -1,9 +1,10 @@
-import React from "react";
+import React, { useState, useRef, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import { RootState } from "../../../store/store";
 import { logout } from "../../User/authSlice";
 import UserMenu from "../../User/UserMenu";
+import LoginForm from "../../Login/LoginForm";
 
 const NavigationBar: React.FC = () => {
   const navigate = useNavigate();
@@ -13,13 +14,38 @@ const NavigationBar: React.FC = () => {
     (state: RootState) => state.auth
   );
 
+  const [isLoginPopupOpen, setIsLoginPopupOpen] = useState(false);
+  const popupRef = useRef<HTMLDivElement>(null);
+
   const handleLoginClick = () => {
-    navigate("/login");
+    setIsLoginPopupOpen(true);
   };
+
+  const handleClosePopup = () => {
+    setIsLoginPopupOpen(false);
+  };
+
+  const handleClickOutside = (event: MouseEvent) => {
+    if (popupRef.current && !popupRef.current.contains(event.target as Node)) {
+      handleClosePopup();
+    }
+  };
+
+  useEffect(() => {
+    if (isLoginPopupOpen) {
+      document.addEventListener("mousedown", handleClickOutside);
+    } else {
+      document.removeEventListener("mousedown", handleClickOutside);
+    }
+
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, [isLoginPopupOpen]);
 
   const handleLogout = () => {
     dispatch(logout());
-    navigate("/"); // Redirect to home after logout
+    navigate("/");
   };
 
   return (
@@ -68,6 +94,17 @@ const NavigationBar: React.FC = () => {
           />
         </div>
       </div>
+
+      {isLoginPopupOpen && (
+        <div className="fixed inset-0 bg-gray-600 bg-opacity-50 flex justify-center items-center z-40">
+          <div
+            ref={popupRef}
+            className="bg-white p-4 rounded-lg shadow-lg z-50"
+          >
+            <LoginForm />
+          </div>
+        </div>
+      )}
     </nav>
   );
 };

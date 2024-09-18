@@ -41,8 +41,8 @@ const Register: React.FC<RegisterProps> = ({ onEmailRegister }) => {
   const pronounOptions = ["He/Him", "She/Her", "They/Them"];
 
   return (
-    <div className="flex justify-center items-center h-screen bg-gray-50">
-      <div className="bg-white py-16 px-4 sm:px-8 lg:px-12 rounded-lg shadow-md w-full max-w-sm sm:max-w-md">
+    <div className="flex justify-center items-center">
+      <div className="bg-white py-16 px-4 sm:px-8 lg:px-12 w-full max-w-sm sm:max-w-md">
         <button onClick={onEmailRegister} className="flex items-center mb-6 space-x-2 text-black">
           <span className="text-xl font-bold">{"<"}</span>
           <span className="text-base font-medium">Quay trở lại</span>
@@ -83,7 +83,7 @@ const Register: React.FC<RegisterProps> = ({ onEmailRegister }) => {
               onBlur={formik.handleBlur}
               error={formik.touched.username && Boolean(formik.errors.username)}
               helperText={formik.touched.username && formik.errors.username}
-              InputProps={{
+              sx={{
                 style: {
                   backgroundColor: "#F3F4F6",
                 },
@@ -104,9 +104,9 @@ const Register: React.FC<RegisterProps> = ({ onEmailRegister }) => {
               onBlur={formik.handleBlur}
               error={formik.touched.pronouns && Boolean(formik.errors.pronouns)}
               helperText={formik.touched.pronouns && formik.errors.pronouns}
-              InputProps={{
-                style: {
-                  backgroundColor: "#F3F4F6",
+              sx={{
+                input: {
+                  style: { backgroundColor: "#F3F4F6" },
                 },
               }}
             >

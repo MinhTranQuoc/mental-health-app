@@ -60,7 +60,7 @@ const LoginForm: React.FC<{ onBack: () => void }> = ({ onBack }) => {
           avatar: data.avatar
         }));
 
-        navigate("/"); // Navigate to dashboard on success
+        window.location.reload(); // Navigate to dashboard on success
       } catch (error) {
         console.error("Login error:", error);
         setLoginError("Đăng nhập thất bại. Vui lòng kiểm tra lại thông tin.");
@@ -71,8 +71,8 @@ const LoginForm: React.FC<{ onBack: () => void }> = ({ onBack }) => {
   });
 
   return (
-    <div className="flex justify-center items-center h-screen bg-gray-50">
-      <div className="bg-white py-16 px-4 sm:px-8 lg:px-12 rounded-lg shadow-md w-full max-w-sm sm:max-w-md">
+    <div className="flex justify-center items-center ">
+      <div className="bg-white py-16 px-4 sm:px-8 lg:px-12 w-full max-w-sm sm:max-w-md">
         <button onClick={onBack} className="flex items-center mb-6 space-x-2 text-black">
           <span className="text-xl font-bold">{"<"}</span>
           <span className="text-base font-medium">Quay trở lại các tùy chọn đăng nhập</span>
@@ -92,7 +92,7 @@ const LoginForm: React.FC<{ onBack: () => void }> = ({ onBack }) => {
               onBlur={formik.handleBlur}
               error={formik.touched.username && Boolean(formik.errors.username)}
               helperText={formik.touched.username && formik.errors.username}
-              InputProps={{
+              sx={{
                 style: {
                   backgroundColor: "#F3F4F6",
                 },
