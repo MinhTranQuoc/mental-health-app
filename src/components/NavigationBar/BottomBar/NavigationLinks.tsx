@@ -2,17 +2,18 @@ import React, { useEffect, useRef, useState } from "react";
 import Dropdown from "./Dropdown";
 import UserMenu from "../../User/UserMenu";
 import { useNavigate } from "react-router-dom";
+import { useSelector, useDispatch } from "react-redux";
+import { RootState } from "../../../store/store";
+import { logout } from "../../User/authSlice";
+import LoginForm from "../../Login/LoginForm";
+import RegisterForm from "../../Register/RegisterForm";
 
 const NavigationLinks = () => {
   const navigate = useNavigate();
+  const dispatch = useDispatch();
   const [isDropdownOpen, setDropdownOpen] = useState(false);
   const [isRankingDropdownOpen, setRankingDropdownOpen] = useState(false);
   const [isMobileMenuOpen, setMobileMenuOpen] = useState(false);
-  const [user, setUser] = useState({
-    isLoggedIn: false,
-    name: "",
-    avatar: "",
-  });
 
   const dropdownRef = useRef<HTMLDivElement | null>(null);
   const rankingDropdownRef = useRef<HTMLDivElement | null>(null);
@@ -87,41 +88,62 @@ const NavigationLinks = () => {
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
 
-  useEffect(() => {
-    const name = localStorage.getItem("name") || "";
-    const avatar = localStorage.getItem("avatar") || "";
-    const isLoggedIn = localStorage.getItem("isLoggedIn") === "true";
-    const token = localStorage.getItem("token");
+  
 
-    if (isLoggedIn && token) {
-      setUser({
-        isLoggedIn,
-        name,
-        avatar,
-      });
+  const { isLoggedIn, readername, avatar } = useSelector(
+    (state: RootState) => state.auth
+  );
+
+  const [isLoginPopupOpen, setIsLoginPopupOpen] = useState(false);
+  const [isRegisterPopupOpen, setIsRegisterPopupOpen] = useState(false); // State for Register Popup
+  const popupRef = useRef<HTMLDivElement>(null);
+
+  const handleLoginClick = () => {
+    setIsLoginPopupOpen(true);
+  };
+
+  const handleBackToLoginForm = () => {
+    setIsLoginPopupOpen(true);
+    setIsRegisterPopupOpen(false);
+  };
+
+  const handleRegisterClick = () => {
+    setIsRegisterPopupOpen(true);
+  };
+
+  const handleClosePopup = () => {
+    setIsLoginPopupOpen(false);
+    setIsRegisterPopupOpen(false);
+  };
+
+  const handleClickOutside = (event: MouseEvent) => {
+    if (popupRef.current && !popupRef.current.contains(event.target as Node)) {
+      handleClosePopup();
     }
-  }, []);
+  };
+
+  useEffect(() => {
+    if (isLoginPopupOpen || isRegisterPopupOpen) {
+      document.addEventListener("mousedown", handleClickOutside);
+    } else {
+      document.removeEventListener("mousedown", handleClickOutside);
+    }
+
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, [isLoginPopupOpen, isRegisterPopupOpen]);
 
   const handleLogout = () => {
-    localStorage.removeItem("name");
-    localStorage.removeItem("avatar");
-    localStorage.removeItem("isLoggedIn");
-    localStorage.removeItem("token");
-    setUser({
-      isLoggedIn: false,
-      name: "",
-      avatar: "",
-    });
-  };
-  const handleLoginClick = () => {
-    navigate("/login");
+    dispatch(logout());
+    navigate("/");
   };
 
   return (
     <div className="bg-[#f58120]">
-      <div className="container mx-auto flex items-center justify-between px-4 py-3 md:py-0 md:px-0 ">
+      <div className="container mx-auto flex items-center justify-between px-4 py-3 md:py-0 md:px-0">
         {/* Hamburger Menu for Mobile */}
-        <div className=" container mx-auto flex justify-between items-center py-2 md:hidden">
+        <div className="container mx-auto flex justify-between items-center py-2 md:hidden">
           <button
             className="text-white md:hidden focus:outline-none items-center"
             onClick={toggleMobileMenu}
@@ -168,7 +190,12 @@ const NavigationLinks = () => {
               </svg>
             </button>
           </div>
-            <UserMenu user={user} onLoginClick={handleLoginClick} onLogout={handleLogout} />
+          <UserMenu
+            user={{ isLoggedIn, readername, avatar }}
+            onLoginClick={handleLoginClick}
+            onLogout={handleLogout}
+            onRegister={handleRegisterClick}
+          />
         </div>
 
         {/* Navigation Links */}
@@ -262,6 +289,27 @@ const NavigationLinks = () => {
               {text}
             </a>
           ))}
+        </div>
+      )}
+      {isLoginPopupOpen && (
+        <div className="fixed inset-0 bg-gray-600 bg-opacity-50 flex justify-center items-center z-40">
+          <div
+            ref={popupRef}
+            className="bg-white p-4 rounded-lg shadow-lg z-50"
+          >
+            <LoginForm />
+          </div>
+        </div>
+      )}
+
+      {isRegisterPopupOpen && (
+        <div className="fixed inset-0 bg-gray-600 bg-opacity-50 flex justify-center items-center z-40">
+          <div
+            ref={popupRef}
+            className="bg-white p-4 rounded-lg shadow-lg z-50"
+          >
+            <RegisterForm onBackToLogin={handleBackToLoginForm} />
+          </div>
         </div>
       )}
     </div>

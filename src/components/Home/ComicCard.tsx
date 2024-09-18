@@ -1,6 +1,6 @@
-import React from 'react';
-import { Box, Card, CardContent, CardMedia, Typography } from '@mui/material';
-import { NovelResponseDto } from '../../interfaces/NovelResponseDto '; // Đảm bảo đường dẫn đúng với nơi bạn định nghĩa NovelResponseDto
+import React from "react";
+import { Box, Card, CardContent, CardMedia, Typography } from "@mui/material";
+import { NovelResponseDto } from "../../interfaces/NovelResponseDto";
 
 interface ComicCardProps {
   comic: NovelResponseDto;
@@ -8,67 +8,50 @@ interface ComicCardProps {
 
 const ComicCard: React.FC<ComicCardProps> = ({ comic }) => {
   return (
-    <Card sx={{ position: 'relative', overflow: 'hidden', height: 'auto' }}>
+    <Card className="relative overflow-hidden h-auto w-full max-w-xs sm:max-w-sm md:max-w-md lg:max-w-lg">
       <CardMedia
         component="img"
-        height="200"
-        image={comic.img || 'https://minhducpc.vn/uploads/images/hinh-cute01.png'}
+        image={
+          comic.img || "https://minhducpc.vn/uploads/images/hinh-cute01.png"
+        }
         alt={comic.title}
-        sx={{ objectFit: 'cover', width: '100%', height: '25rem' }} // Ensure images fit the container
+        className="object-cover w-full h-[12rem] sm:h-[25rem]"
       />
       {comic.isHot && (
-        <Box sx={{
-          position: 'absolute',
-          top: 8,
-          right: 8,
-          backgroundColor: 'red',
-          color: 'white',
-          padding: '4px 8px',
-          fontSize: '0.75rem',
-          borderRadius: '4px',
-          zIndex: 10,
-        }}>
+        <Box className="absolute top-2 right-2 bg-red-500 text-white p-1 text-xs rounded z-10">
           Hot
         </Box>
       )}
-      <Box sx={{
-        position: 'absolute',
-        top: 8,
-        left: 8,
-        backgroundColor: 'blue',
-        color: 'white',
-        padding: '4px 8px',
-        fontSize: '0.75rem',
-        borderRadius: '4px',
-        zIndex: 10,
-      }}>
+      <Box className="absolute top-2 left-2 bg-blue-500 text-white p-1 text-xs rounded z-10">
         {comic.updated}
       </Box>
-      <CardContent sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-        <Box sx={{ flex: 1, display: 'flex', flexDirection: 'column', overflow: 'hidden' }}>
-          <Typography variant="body2" sx={{
-            whiteSpace: 'nowrap',
-            overflow: 'hidden',
-            textOverflow: 'ellipsis',
-            fontWeight: 'bold',
-            fontSize: "18px",
-          }}>
+      <CardContent className="flex flex-col sm:flex-row items-start sm:items-center justify-between p-2 sm:p-4">
+        <Box className="flex-1 overflow-hidden">
+          <Typography
+            variant="body2"
+            className="md:truncate md:font-bold text-base sm:text-lg md:text-xl"
+            sx={{
+              fontWeight: { md: "bold" }, // Font-weight bold khi màn hình >= md
+              fontSize: { xs: "0.75rem", sm: "0.9rem", md: "1rem" }, // Điều chỉnh kích thước theo breakpoint
+            }}
+          >
             {comic.title}
           </Typography>
-          <Typography variant="body2" color="text.secondary">
+          <Typography variant="body2" className="text-gray-600" sx={{
+              fontWeight: { md: "bold" }, // Font-weight bold khi màn hình >= md
+              fontSize: { xs: "0.55rem", md:"0.8rem" }, // Điều chỉnh kích thước theo breakpoint
+            }}>
             Chapter {comic.chapter}
           </Typography>
         </Box>
-        <Box sx={{ flexShrink: 0 }}>
+        <Box className="flex-shrink-0 mt-2 sm:mt-0">
           <img
-            src={comic.avatar || 'https://cdn-icons-png.flaticon.com/512/6858/6858504.png'}
+            src={
+              comic.avatar ||
+              "https://cdn-icons-png.flaticon.com/512/6858/6858504.png"
+            }
             alt="avatar"
-            style={{
-              width: '50px',
-              height: '50px',
-              borderRadius: '50%',
-              objectFit: 'cover',
-            }}
+            className="w-12 h-12 rounded-full object-cover"
           />
         </Box>
       </CardContent>

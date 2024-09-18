@@ -1,53 +1,81 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import UserMenu from "../../User/UserMenu"; // Import the new component
+import { useSelector, useDispatch } from "react-redux";
+import { RootState } from "../../../store/store";
+import { logout } from "../../User/authSlice";
+import UserMenu from "../../User/UserMenu";
+import LoginForm from "../../Login/LoginForm";
+import RegisterForm from "../../Register/RegisterForm"; // Import RegisterForm
 
 const NavigationBar: React.FC = () => {
   const navigate = useNavigate();
-  const [user, setUser] = useState({
-    isLoggedIn: false,
-    name: "",
-    avatar: "",
-  });
+  const dispatch = useDispatch();
 
-  useEffect(() => {
-    const name = localStorage.getItem("name") || "";
-    const avatar = localStorage.getItem("avatar") || "";
-    const isLoggedIn = localStorage.getItem("isLoggedIn") === "true";
-    const token = localStorage.getItem("token");
+  const { isLoggedIn, readername, avatar } = useSelector(
+    (state: RootState) => state.auth
+  );
 
-    if (isLoggedIn && token) {
-      setUser({
-        isLoggedIn,
-        name,
-        avatar,
-      });
-    }
-  }, []);
+  const [isLoginPopupOpen, setIsLoginPopupOpen] = useState(false);
+  const [isRegisterPopupOpen, setIsRegisterPopupOpen] = useState(false); // State for Register Popup
+  const popupRef = useRef<HTMLDivElement>(null);
 
   const handleLoginClick = () => {
-    navigate("/login");
+    setIsLoginPopupOpen(true);
   };
 
+  const handleBackToLoginForm = () => {
+    setIsLoginPopupOpen(true);
+    setIsRegisterPopupOpen(false);
+  };
+
+  const handleRegisterClick = () => {
+    setIsRegisterPopupOpen(true);
+  };
+
+  const handleClosePopup = () => {
+    setIsLoginPopupOpen(false);
+    setIsRegisterPopupOpen(false);
+  };
+
+  const handleClickOutside = (event: MouseEvent) => {
+    if (popupRef.current && !popupRef.current.contains(event.target as Node)) {
+      handleClosePopup();
+    }
+  };
+
+  useEffect(() => {
+    if (isLoginPopupOpen || isRegisterPopupOpen) {
+      document.addEventListener("mousedown", handleClickOutside);
+    } else {
+      document.removeEventListener("mousedown", handleClickOutside);
+    }
+
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, [isLoginPopupOpen, isRegisterPopupOpen]);
+
+  useEffect(() => {
+    if (!isLoggedIn) {
+      setIsLoginPopupOpen(true);
+    }
+  }, [isLoggedIn]);
+
   const handleLogout = () => {
-    localStorage.removeItem("token");
-    localStorage.removeItem("name");
-    localStorage.removeItem("avatar");
-    localStorage.removeItem("isLoggedIn");
-    setUser({
-      isLoggedIn: false,
-      name: "",
-      avatar: "",
-    });
+    dispatch(logout());
+    navigate("/");
   };
 
   return (
     <nav className="hidden md:block w-full">
-      {/* Add 'hidden md:block' to hide on mobile */}
       <div className="bg-white w-full border-b border-gray-200">
         <div className="container mx-auto flex justify-between items-center py-4">
           <a href="/" className="flex items-center space-x-2">
-            <img src="" alt="Logo" className="h-10" />
+            <img
+              src="https://upload-os-bbs.hoyolab.com/upload/2023/02/05/132415658/548c4b3d7abf671b4bf338de4f8c0bc1_6253957035541607485.jpg?x-oss-process=image%2Fresize%2Cs_1000%2Fauto-orient%2C0%2Finterlace%2C1%2Fformat%2Cwebp%2Fquality%2Cq_70"
+              alt="Logo"
+              className="h-12 w-12"
+            />
             <span className="font-bold text-gray-800 text-xl">
               MENTAL HEALTH
             </span>
@@ -77,9 +105,36 @@ const NavigationBar: React.FC = () => {
             </button>
           </div>
 
-          <UserMenu user={user} onLoginClick={handleLoginClick} onLogout={handleLogout} />
+          <UserMenu
+            user={{ isLoggedIn, readername, avatar }}
+            onLoginClick={handleLoginClick}
+            onLogout={handleLogout}
+            onRegister={handleRegisterClick} // Pass the handler to UserMenu
+          />
         </div>
       </div>
+
+      {isLoginPopupOpen && (
+        <div className="fixed inset-0 bg-gray-600 bg-opacity-50 flex justify-center items-center z-30">
+          <div
+            ref={popupRef}
+            className="bg-white p-4 rounded-lg shadow-lg z-50"
+          >
+            <LoginForm />
+          </div>
+        </div>
+      )}
+
+      {isRegisterPopupOpen && (
+        <div className="fixed inset-0 bg-gray-600 bg-opacity-50 flex justify-center items-center z-30">
+          <div
+            ref={popupRef}
+            className="bg-white p-4 rounded-lg shadow-lg z-40"
+          >
+            <RegisterForm onBackToLogin={handleBackToLoginForm} />
+          </div>
+        </div>
+      )}
     </nav>
   );
 };

@@ -1,20 +1,19 @@
-// src/components/UserMenu.tsx
-
 import React, { useState, useRef } from 'react';
 
 interface User {
   isLoggedIn: boolean;
-  name: string;
-  avatar: string;
+  readername: string | null;
+  avatar: string | null;
 }
 
 interface UserMenuProps {
   user: User;
   onLoginClick: () => void;
   onLogout: () => void;
+  onRegister: () => void;
 }
 
-const UserMenu: React.FC<UserMenuProps> = ({ user, onLoginClick, onLogout }) => {
+const UserMenu: React.FC<UserMenuProps> = ({ user, onLoginClick, onLogout, onRegister}) => {
   const [isDropdownOpen, setDropdownOpen] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
 
@@ -47,13 +46,13 @@ const UserMenu: React.FC<UserMenuProps> = ({ user, onLoginClick, onLogout }) => 
             onClick={toggleDropdown}
           >
             <img
-              src={user.avatar}
+              src={user.avatar || '/default-avatar.png'}
               alt="User Avatar"
               className="h-11 w-11 rounded-full border border-gray-300"
             />
             <div className="flex flex-col">
-              <span className="md:text-gray-800 font-semibold text-lg text-white ">
-                {user.name}
+              <span className="md:text-gray-800 font-semibold text-lg text-white">
+                {user.readername || 'User'}
               </span>
             </div>
           </div>
@@ -83,14 +82,17 @@ const UserMenu: React.FC<UserMenuProps> = ({ user, onLoginClick, onLogout }) => 
         </div>
       ) : (
         <div className="flex space-x-4">
-          <button className="md:bg-blue-500 md:text-white px-4 py-2 rounded-lg md:hover:bg-blue-600 bg-[#f58120] text-white transition">
-            Đăng ký
-          </button>
           <button
             onClick={onLoginClick}
             className="md:bg-blue-500 md:text-white px-4 py-2 rounded-lg md:hover:bg-blue-600 bg-[#f58120] text-white transition"
           >
             Đăng nhập
+          </button>
+          <button className="md:bg-blue-500 md:text-white px-4 py-2 rounded-lg md:hover:bg-blue-600 bg-[#f58120] text-white transition"
+                  onClick={onRegister}
+          
+          >
+            Đăng ký
           </button>
         </div>
       )}

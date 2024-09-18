@@ -1,23 +1,21 @@
 import React, { useEffect, useRef } from 'react';
 import { Box, Typography } from '@mui/material';
-import { useGetHotNovelsQuery } from '../../service/api/novelApi'; // Đường dẫn đến novelApi của bạn
-import ComicCard from './ComicCard'; // Import the new ComicCard component
-import LoadingSpinner from '../Features/LoadingSpinner'; // Giả sử bạn có component loading
+import { useGetHotNovelsQuery } from '../../service/api/novelApi';
+import ComicCard from './ComicCard';
+import LoadingSpinner from '../Features/LoadingSpinner';
 
 const HotComics = () => {
   const scrollContainerRef = useRef<HTMLDivElement | null>(null);
   const { data: topComics, isLoading, error } = useGetHotNovelsQuery();
 
   useEffect(() => {
-    console.log(topComics); // Kiểm tra dữ liệu trả về từ API
-
     const container = scrollContainerRef.current;
     if (container && topComics) {
       const scrollAmount = 300;
       const intervalDelay = 5000;
 
       const content = container.innerHTML;
-      container.innerHTML = `${content}${content}`; // Nhân đôi nội dung để cuộn
+      container.innerHTML = `${content}${content}`;
 
       const scrollWidth = container.scrollWidth / 2;
       let scrollLeft = 0;
@@ -39,24 +37,17 @@ const HotComics = () => {
 
   return (
     <>
-      <Typography variant="h5" component="h2" sx={{ color: 'red', fontWeight: 'bold', paddingBottom: '16px' }}>
+      <Typography variant="h5" component="h2" className="text-red-500 font-bold pb-4">
         ⭐ Truyện Hay
       </Typography>
       <div
         ref={scrollContainerRef}
-        style={{
-          display: 'flex',
-          overflowX: 'hidden',
-          whiteSpace: 'nowrap',
-          scrollBehavior: 'smooth',
-          width: '100%',
-        }}
-        className="scroll-container"
+        className="flex overflow-x-hidden md:whitespace-nowrap scroll-smooth"
       >
         {topComics?.map((comic) => (
           <Box
             key={comic.id}
-            sx={{ flex: '0 0 auto', width: '20%', padding: '8px', position: 'relative' }}
+            className="flex-shrink-0 w-40 sm:w-48 md:w-60 lg:w-72 p-2 relative"
           >
             <ComicCard comic={comic} />
           </Box>
