@@ -10,9 +10,10 @@ interface UserMenuProps {
   user: User;
   onLoginClick: () => void;
   onLogout: () => void;
+  onRegister: () => void;
 }
 
-const UserMenu: React.FC<UserMenuProps> = ({ user, onLoginClick, onLogout }) => {
+const UserMenu: React.FC<UserMenuProps> = ({ user, onLoginClick, onLogout, onRegister}) => {
   const [isDropdownOpen, setDropdownOpen] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
 
@@ -87,7 +88,10 @@ const UserMenu: React.FC<UserMenuProps> = ({ user, onLoginClick, onLogout }) => 
           >
             Đăng nhập
           </button>
-          <button className="md:bg-blue-500 md:text-white px-4 py-2 rounded-lg md:hover:bg-blue-600 bg-[#f58120] text-white transition">
+          <button className="md:bg-blue-500 md:text-white px-4 py-2 rounded-lg md:hover:bg-blue-600 bg-[#f58120] text-white transition"
+                  onClick={onRegister}
+          
+          >
             Đăng ký
           </button>
         </div>

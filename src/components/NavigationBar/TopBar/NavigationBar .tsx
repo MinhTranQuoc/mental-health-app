@@ -5,6 +5,7 @@ import { RootState } from "../../../store/store";
 import { logout } from "../../User/authSlice";
 import UserMenu from "../../User/UserMenu";
 import LoginForm from "../../Login/LoginForm";
+import RegisterForm from "../../Register/RegisterForm"; // Import RegisterForm
 
 const NavigationBar: React.FC = () => {
   const navigate = useNavigate();
@@ -15,14 +16,25 @@ const NavigationBar: React.FC = () => {
   );
 
   const [isLoginPopupOpen, setIsLoginPopupOpen] = useState(false);
+  const [isRegisterPopupOpen, setIsRegisterPopupOpen] = useState(false); // State for Register Popup
   const popupRef = useRef<HTMLDivElement>(null);
 
   const handleLoginClick = () => {
     setIsLoginPopupOpen(true);
   };
 
+  const handleBackToLoginForm = () => {
+    setIsLoginPopupOpen(true);
+    setIsRegisterPopupOpen(false);
+  };
+
+  const handleRegisterClick = () => {
+    setIsRegisterPopupOpen(true);
+  };
+
   const handleClosePopup = () => {
     setIsLoginPopupOpen(false);
+    setIsRegisterPopupOpen(false);
   };
 
   const handleClickOutside = (event: MouseEvent) => {
@@ -32,7 +44,7 @@ const NavigationBar: React.FC = () => {
   };
 
   useEffect(() => {
-    if (isLoginPopupOpen) {
+    if (isLoginPopupOpen || isRegisterPopupOpen) {
       document.addEventListener("mousedown", handleClickOutside);
     } else {
       document.removeEventListener("mousedown", handleClickOutside);
@@ -41,7 +53,13 @@ const NavigationBar: React.FC = () => {
     return () => {
       document.removeEventListener("mousedown", handleClickOutside);
     };
-  }, [isLoginPopupOpen]);
+  }, [isLoginPopupOpen, isRegisterPopupOpen]);
+
+  useEffect(() => {
+    if (!isLoggedIn) {
+      setIsLoginPopupOpen(true);
+    }
+  }, [isLoggedIn]);
 
   const handleLogout = () => {
     dispatch(logout());
@@ -91,17 +109,29 @@ const NavigationBar: React.FC = () => {
             user={{ isLoggedIn, readername, avatar }}
             onLoginClick={handleLoginClick}
             onLogout={handleLogout}
+            onRegister={handleRegisterClick} // Pass the handler to UserMenu
           />
         </div>
       </div>
 
       {isLoginPopupOpen && (
-        <div className="fixed inset-0 bg-gray-600 bg-opacity-50 flex justify-center items-center z-40">
+        <div className="fixed inset-0 bg-gray-600 bg-opacity-50 flex justify-center items-center z-30">
           <div
             ref={popupRef}
             className="bg-white p-4 rounded-lg shadow-lg z-50"
           >
             <LoginForm />
+          </div>
+        </div>
+      )}
+
+      {isRegisterPopupOpen && (
+        <div className="fixed inset-0 bg-gray-600 bg-opacity-50 flex justify-center items-center z-30">
+          <div
+            ref={popupRef}
+            className="bg-white p-4 rounded-lg shadow-lg z-40"
+          >
+            <RegisterForm onBackToLogin={handleBackToLoginForm} />
           </div>
         </div>
       )}

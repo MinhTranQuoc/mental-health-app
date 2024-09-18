@@ -5,6 +5,8 @@ import { useNavigate } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import { RootState } from "../../../store/store";
 import { logout } from "../../User/authSlice";
+import LoginForm from "../../Login/LoginForm";
+import RegisterForm from "../../Register/RegisterForm";
 
 const NavigationLinks = () => {
   const navigate = useNavigate();
@@ -86,19 +88,55 @@ const NavigationLinks = () => {
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
 
-  const user = useSelector((state: RootState) => ({
-    isLoggedIn: state.auth.isLoggedIn,
-    readername: state.auth.readername,
-    avatar: state.auth.avatar,
-  }));
+  
+
+  const { isLoggedIn, readername, avatar } = useSelector(
+    (state: RootState) => state.auth
+  );
+
+  const [isLoginPopupOpen, setIsLoginPopupOpen] = useState(false);
+  const [isRegisterPopupOpen, setIsRegisterPopupOpen] = useState(false); // State for Register Popup
+  const popupRef = useRef<HTMLDivElement>(null);
+
+  const handleLoginClick = () => {
+    setIsLoginPopupOpen(true);
+  };
+
+  const handleBackToLoginForm = () => {
+    setIsLoginPopupOpen(true);
+    setIsRegisterPopupOpen(false);
+  };
+
+  const handleRegisterClick = () => {
+    setIsRegisterPopupOpen(true);
+  };
+
+  const handleClosePopup = () => {
+    setIsLoginPopupOpen(false);
+    setIsRegisterPopupOpen(false);
+  };
+
+  const handleClickOutside = (event: MouseEvent) => {
+    if (popupRef.current && !popupRef.current.contains(event.target as Node)) {
+      handleClosePopup();
+    }
+  };
+
+  useEffect(() => {
+    if (isLoginPopupOpen || isRegisterPopupOpen) {
+      document.addEventListener("mousedown", handleClickOutside);
+    } else {
+      document.removeEventListener("mousedown", handleClickOutside);
+    }
+
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, [isLoginPopupOpen, isRegisterPopupOpen]);
 
   const handleLogout = () => {
     dispatch(logout());
-    navigate("/"); // Redirect to home after logout
-  };
-
-  const handleLoginClick = () => {
-    navigate("/login");
+    navigate("/");
   };
 
   return (
@@ -153,9 +191,10 @@ const NavigationLinks = () => {
             </button>
           </div>
           <UserMenu
-            user={user}
+            user={{ isLoggedIn, readername, avatar }}
             onLoginClick={handleLoginClick}
             onLogout={handleLogout}
+            onRegister={handleRegisterClick}
           />
         </div>
 
@@ -250,6 +289,27 @@ const NavigationLinks = () => {
               {text}
             </a>
           ))}
+        </div>
+      )}
+      {isLoginPopupOpen && (
+        <div className="fixed inset-0 bg-gray-600 bg-opacity-50 flex justify-center items-center z-40">
+          <div
+            ref={popupRef}
+            className="bg-white p-4 rounded-lg shadow-lg z-50"
+          >
+            <LoginForm />
+          </div>
+        </div>
+      )}
+
+      {isRegisterPopupOpen && (
+        <div className="fixed inset-0 bg-gray-600 bg-opacity-50 flex justify-center items-center z-40">
+          <div
+            ref={popupRef}
+            className="bg-white p-4 rounded-lg shadow-lg z-50"
+          >
+            <RegisterForm onBackToLogin={handleBackToLoginForm} />
+          </div>
         </div>
       )}
     </div>

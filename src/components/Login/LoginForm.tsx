@@ -74,7 +74,7 @@ const LoginForm: React.FC = () => {
     <div className="flex justify-center items-center">
       <div className="bg-white py-16 px-4 sm:px-8 lg:px-12 w-full max-w-sm sm:max-w-md">
         <h2 className="text-4xl font-bold mb-6 text-center">
-          Đăng nhập vào Wattpad
+          Đăng nhập vào Mental Health
         </h2>
 
         <div className="space-y-4 sm:space-y-6">
