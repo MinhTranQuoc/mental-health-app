@@ -32,14 +32,14 @@ const LoginForm: React.FC<{ onBack: () => void }> = ({ onBack }) => {
 
   // Validation schema
   const validationSchema = Yup.object({
-    username: Yup.string().required("Vui lòng nhập tên đăng nhập"),
+    keyword: Yup.string().required("Vui lòng nhập tên đăng nhập"),
     password: Yup.string().required("Vui lòng nhập mật khẩu"),
   });
 
   // Formik initialization
   const formik = useFormik({
     initialValues: {
-      username: "",
+      keyword: "",
       password: "",
     },
     validationSchema,
@@ -86,12 +86,12 @@ const LoginForm: React.FC<{ onBack: () => void }> = ({ onBack }) => {
               variant="outlined"
               placeholder="Tên đăng nhập"
               fullWidth
-              name="username"
-              value={formik.values.username}
+              name="keyword"
+              value={formik.values.keyword}
               onChange={formik.handleChange}
               onBlur={formik.handleBlur}
-              error={formik.touched.username && Boolean(formik.errors.username)}
-              helperText={formik.touched.username && formik.errors.username}
+              error={formik.touched.keyword && Boolean(formik.errors.keyword)}
+              helperText={formik.touched.keyword && formik.errors.keyword}
               sx={{
                 style: {
                   backgroundColor: "#F3F4F6",
